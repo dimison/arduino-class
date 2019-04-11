@@ -1,0 +1,252 @@
+/*
+    Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+    SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+    AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+    THIS SOFTWARE.
+    
+*/
+
+
+const char overflow=(8 * 2) + 1;
+const char int_size=sizeof(int);
+int regA, regB, regC, regpush;
+char stack[overflow - 1];
+char head=0;
+
+const int wait_time=100;
+
+void setup() {
+
+
+	 out( 0 );
+	 out( 1 );
+	 out( 2 );
+	 out( 3 );
+	 out( 4 );
+	 out( 5 );
+	 out( 6 );
+	 out( 7 );
+	 out( 8 );
+
+
+	 pushi( 7);
+	 num(*((int*) stack[0]));
+	 num((int) popi());
+//	 num(regpush);
+//	 num(head);
+
+
+
+
+
+
+
+
+
+
+
+	 
+
+
+	 
+	 
+}
+
+void loop() {
+
+
+
+}
+void w( int x, int y ) {
+
+     digitalWrite( x + 2, y);
+
+}
+void numbers(){
+
+
+     num( 0 );
+     delay( wait_time );
+     num( 1 );
+     delay( wait_time );
+     num( 2 );
+     delay( wait_time );
+     num( 3 );
+     delay( wait_time );
+     num( 4 );
+     delay( wait_time );
+     num( 5 );
+     delay( wait_time );
+     num( 6 );
+     delay( wait_time );
+     num( 7 );
+     delay( wait_time );
+     num( 8 );
+     delay( wait_time );
+     num( 9 );
+     delay( wait_time );
+
+
+
+}
+void blink( int x ) {
+
+     w( x, HIGH );
+     delay( wait_time );
+     w( x, LOW );
+     delay( wait_time );
+
+}
+void out( int x ) {
+
+     pinMode( x + 2, OUTPUT );
+
+}
+void screen(int a, int b, int c, int d, int e, int f, int g, int h, int i){
+
+     	w(0,a);
+	w(1,b);
+	w(2,c);
+	w(3,d);
+	w(4,e);
+	w(5,f);
+	w(6,g);
+	w(7,h);
+	w(8,i);
+
+
+     
+
+}
+void num(int x) {
+
+     switch(x){
+
+	case 0:
+	screen(HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH);
+	break;
+	case 1:
+	screen(HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,LOW,LOW);
+	break;
+        case 2:
+        screen(HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,HIGH);
+	break;
+        case 3:
+        screen(HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH);
+	break;
+        case 4:
+        screen(HIGH,LOW,HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH);	
+	break;
+        case 5:
+        screen(LOW,HIGH,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW);
+	break;
+        case 6:
+        screen(HIGH,LOW,LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW);
+	break;
+        case 7:
+        screen(HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH);
+	break;
+        case 8:
+        screen(HIGH,HIGH,LOW,HIGH,HIGH,HIGH,LOW,HIGH,HIGH);
+	break;
+        case 9:
+        screen(LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW,LOW,HIGH);	
+	break;
+
+
+     }    
+}
+void pushc(char x){
+
+     if(stack == overflow){
+
+     	     blink(2);
+	     blink(2);
+	     blink(2);
+	     blink(2);
+
+     }
+     else{
+
+       stack[head++]=x;
+
+     }
+
+}
+char popc(){
+
+       if(head){
+
+       return stack[--head];
+
+       }
+       else{
+
+             blink(8);
+	     blink(8);
+	     blink(8);
+	     blink(8);
+
+
+       }
+
+}
+void pushi(int x){
+
+     if(head+2==overflow){
+
+             blink(2);
+	     blink(2);
+	     blink(2);
+	     blink(2);
+
+     }
+     else
+     {
+	regpush=x;
+	memcpy(stack[head+=2],&regpush,int_size);
+
+     }
+
+}
+int popi(){
+       if(head > 1){
+
+
+       head-=2;
+       memcpy(&regpush, stack[head],int_size);
+       return regpush;
+
+
+
+       }
+       else{
+
+             blink(8);
+	     blink(8);
+	     blink(8);
+	     blink(8);
+
+
+       }
+
+}
+
+
+
+
+
+/*     
+(concat "if \"$HOME\"/.config/emacs-arduino/arduino-cli "
+					 "compile --fqbn arduino:avr:uno "
+					 default-directory
+					 "; then "
+					 "\"$HOME\"/.config/emacs-arduino/arduino-cli "
+					 "upload -p /dev/ttyACM0 --fqbn arduino:avr:uno "
+					 default-directory
+					 "; else echo fail; fi"
+					 )*/
