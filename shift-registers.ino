@@ -12,6 +12,24 @@
 
 /*
 
+
+ (                          (                                            
+ )\ )    )     (        )   )\ )                        )                
+(()/( ( /( (   )\ )  ( /(  (()/(   (   (  (  (       ( /(   (   (        
+ /(_)))\()))\ (()/(  )\())  /(_)) ))\  )\))( )\  (   )\()) ))\  )(   (   
+(_)) ((_)\((_) /(_))(_))/  (_))  /((_)((_))\((_) )\ (_))/ /((_)(()\  )\  
+/ __|| || |(_) | _|| | _   | _ \(_))   (()(_)(_)((_)| |_ (_))   ((_)((_) 
+\__ \| __ || | |_||    _|  |   // -_) / _` | | |(_-<|  _|/ -_) | '_|(_-< 
+|___/|_||_||_| |_|   \__|  |_|_\\___| \__, | |_|/__/ \__|\___| |_|  /__/
+                                      |___/
+
+Shift registers can be chained to extend the digital pins of your controller (like an arduino or a raspberry pi).
+
+Here is a guide to a very specific shift register for a very specific class. Your shift register may vary.
+
+This shift register converts 3 digital pins into 8 digital pins. For each additional shift register you chain
+you gain 8 more digital pins.
+
 Guide:
 
 The circle in the top left indicates the direction of the chip. When counting
@@ -53,9 +71,11 @@ latch - latch pin. At least one of these must go on the arduino.
  7       ---*           *---       power
             *           *
             *           *
- ground  ---*           *---       ? (I don't know what this pin does. I intend to find out).
+ ground  ---*           *---       data passing (see below)
             *************
 
+
+You can put shifters in series to extend the pins even further.
 
 */
 
@@ -98,8 +118,10 @@ void setup()
 void loop()
 { 
 //change the number 0 to anything between 0 and 7
-sw(0,HIGH);er
+//you can go higher than 7 if you follow the guide to adding mroe shifters.
+sw(0,HIGH);
 delay(1000);
-sw(0,LOW
+sw(0,LOW);
 delay(1000);
 }
+
