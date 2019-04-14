@@ -10,50 +10,37 @@
     
 */
 
-const char row0=9;
-const char row1=8;
-const char row2=7;
-const char row3=6;
-const char column0=5;
-const char column1=4;
-const char column2=3;
-const char column3=2;
+//Make sure to change these pins to match your board.
+unsigned row0=9,row1=8,row2=7,row3=6,column0=5,column1=4,column2=3,column3=2,keystroke;
 
-bool keypad_data[8]={0,0,0,0,0,0,0,0};
-
-void set_8_modes(char a, char b,char c,char d,char e,char f,char g,char h){
-  pinMode(a,INPUT_PULLUP);
-  pinMode(b,INPUT_PULLUP);
-  pinMode(c,INPUT_PULLUP);
-  pinMode(d,INPUT_PULLUP);
-  pinMode(e,OUTPUT);
-  pinMode(f,OUTPUT);
-  pinMode(g,OUTPUT);
-  pinMode(h,OUTPUT);
+void set_4_modes(char a, char b, char c, char d, char mode){
+  pinMode(a,mode); //sets mode for pin a
+  pinMode(b,mode); //sets mode for pin b
+  pinMode(c,mode); //sets mode for pin c
+  pinMode(d,mode); //sets mode for pin d
+}
+void keypad_r(char x){keystroke=(keystroke << 1) + digitalRead(x);}
+void keyboard_half_read(char a,char b,char c,char d,char e,char f,char g,char h){
+  set_4_modes(a,b,c,d,INPUT_PULLUP);set_4_modes(e,f,g,h,OUTPUT); //set modes
+  keypad_r(a);keypad_r(b);keypad_r(c);keypad_r(d); //record 4 rows or columns
+}
+void keypad_read(bool HIGH_or_LOW){   //I am trying to eliminate this function.
+  if(HIGH_or_LOW){                    //if HIGH, scan rows
+    keyboard_half_read(row0,row1,row2,row3,column0,column1,column2,column3);
+  }
+  else{                               //if LOW,  scan columns
+    keyboard_half_read(column0,column1,column2,column3,row0,row1,row2,row3);
+  } //The if/else statement here shouldn't be necessary. I am looking to remove it.
 }
 
-void keypad_scan(bool HIGH_or_LOW){
-  if(HIGH_or_LOW){ //if HIGH rows
-    set_8_modes(row0,row1,row2,row3,column0,column1,column2,column3);
-    keypad_data[0]=digitalRead(row0); 
-    keypad_data[1]=digitalRead(row1);
-    keypad_data[2]=digitalRead(row2);
-    keypad_data[3]=digitalRead(row3);
-  }
-  else{  //if low columns
-    set_8_modes(column0,column1,column2,column3,row0,row1,row2,row3);
-    keypad_data[4]=digitalRead(column0);
-    keypad_data[5]=digitalRead(column1);
-    keypad_data[6]=digitalRead(column2);
-    keypad_data[7]=digitalRead(column3);
-  }
-}
+bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
 
 void setup() {
 
   pinMode(10,OUTPUT);
 
 }
+
 int blink_time=30;
 void blink(){
   digitalWrite(10,HIGH);
@@ -63,41 +50,36 @@ void blink(){
 }
 
 int delay_time=2000;
-void display_data(char index){
-  digitalWrite(10,keypad_data[index]);
+void display_bit(char pin, bool bit){
+  for(char i=0;i<6;i++){blink();}
+  digitalWrite(pin,bit);
   delay(delay_time);
-  blink();
-  blink();
-  blink();
+}
+
+void display_byte(char pin,char data){
+  display_bit(pin,extract_bit(data,0));
+  display_bit(pin,extract_bit(data,1));
+  display_bit(pin,extract_bit(data,2));
+  display_bit(pin,extract_bit(data,3));
+  display_bit(pin,extract_bit(data,4));
+  display_bit(pin,extract_bit(data,5));
+  display_bit(pin,extract_bit(data,6));
+  display_bit(pin,extract_bit(data,7));
+  for(int i=0;i<36;i++){blink();}
+  digitalWrite(pin,LOW);
+  delay(delay_time);
 }
 
 void loop() {
-  //all the lines below are meant to be uncommented
-  keypad_scan(HIGH);
 
-  display_data(0);
-  display_data(1);
-  display_data(2);
-  display_data(3);
-  display_data(4);
-  display_data(5);
-  display_data(6);
-  display_data(7);
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
-  blink();
+  keystroke=keystroke << 4; //I have to shift in 4 bits since one keypad_read is missing.
+
+  //I can not read HIGH and LOw in the same program for some reason.
+  //when I read both HIGH and LOW all the bits are always HIGH
+  keypad_read(HIGH);
+  //keypad_read(HIGH);
+
+  display_byte(10,keystroke);
+
 
 }
