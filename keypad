@@ -10,8 +10,46 @@
     
 */
 
-//Make sure to change these pins to match your board.
-unsigned row0=2,row1=3,row2=4,row3=5,column0=6,column1=7,column2=8,column3=9,keystroke;
+/*
+     )                                 
+  ( /(                           (     
+  )\())  (   (               )   )\ )  
+|((_)\  ))\  )\ )  `  )   ( /(  (()/(  
+|_ ((_)/((_)(()/(  /(/(   )(_))  ((_)) 
+| |/ /(_))   )(_))((_)_\ ((_)_   _| |  
+  ' < / -_) | || || '_ \)/ _` |/ _` |  
+ _|\_\\___|  \_, || .__/ \__,_|\__,_|  
+             |__/ |_|                  
+
+Here is a pin diagram of the keypad rows and columns
+
+@@@@@@@@@@@@@@@@
+@  1  2  3  A  @
+@  4  5  6  B  @
+@  7  8  9  C  @
+@  *  0  #  D  @
+@@@@@@@@@@@@@@@@
+ | | | | | | | |
+ | | | | | | | |
+ | | | | | | | |
+ r r r r c c c c
+ o o o o o o o o
+ o o o o l l l l
+ w w w w u u u u
+         m m m m
+         n n n n
+ 0 1 2 3 0 1 2 3    
+
+ p p p p p p p p
+ i i i i i i i i
+ n n n n n n n n
+ 9 8 7 6 5 4 3 2
+
+ //Make sure to change these pins to match your board.
+
+ */
+
+unsigned column0=2,column1=3,column2=4,column3=5,row3=6,row2=7,row1=8,row0=9,keystroke;
 
 void set_4_modes(char a, char b, char c, char d, char mode){
   pinMode(a,mode); //sets mode for pin a
@@ -26,14 +64,14 @@ void keyboard_half_read(char a,char b,char c,char d,char e,char f,char g,char h)
   digitalWrite(f,LOW);
   digitalWrite(g,LOW);
   digitalWrite(h,LOW);
-  keypad_r(a,e);keypad_r(b,f);keypad_r(c,g);keypad_r(d,h); //record 4 rows or columns
+  keypad_r(a,e);keypad_r(b,f);keypad_r(c,g);keypad_r(d,h); //record 4 columns or rows
 }
 void keypad_read(bool HIGH_or_LOW){   //I am trying to eliminate this function.
-  if(HIGH_or_LOW){                    //if HIGH, scan rows
-    keyboard_half_read(row0,row1,row2,row3,column0,column1,column2,column3);
+  if(HIGH_or_LOW){                    //if HIGH, scan columns
+    keyboard_half_read(column0,column1,column2,column3,row3,row2,row1,row0);
   }
-  else{                               //if LOW,  scan columns
-    keyboard_half_read(column0,column1,column2,column3,row0,row1,row2,row3);
+  else{                               //if LOW,  scan rows
+    keyboard_half_read(row3,row2,row1,row0,column0,column1,column2,column3);
   } //The if/else statement here shouldn't be necessary. I am looking to remove it.
 }
 
@@ -78,8 +116,8 @@ void loop() {
 
   //I can not read HIGH and LOW in the same program for some reason.
   //when I read both HIGH and LOW all the bits are always HIGH
-  keypad_read(HIGH); //read rows
-  keypad_read(LOW);  //read columns
+  keypad_read(HIGH); //read columns
+  keypad_read(LOW);  //read rows
   digitalWrite(10,extract_bit(keystroke,0));
   //    display_byte(10,255);
 
