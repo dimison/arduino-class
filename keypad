@@ -10,7 +10,6 @@
     
 */
 
-
 const char row0=9;
 const char row1=8;
 const char row2=7;
@@ -20,36 +19,33 @@ const char column1=4;
 const char column2=3;
 const char column3=2;
 
-bool keypad_press_data[8]={0,0,0,0,0,0,0,0};
+bool keypad_data[8]={0,0,0,0,0,0,0,0};
 
-char keypad_sweep(bool HIGH_or_LOW){
+void set_8_modes(char a, char b,char c,char d,char e,char f,char g,char h){
+pinMode(a,INPUT_PULLUP);
+pinMode(b,INPUT_PULLUP);
+pinMode(c,INPUT_PULLUP);
+pinMode(d,INPUT_PULLUP);
+pinMode(e,OUTPUT);
+pinMode(f,OUTPUT);
+pinMode(g,OUTPUT);
+pinMode(h,OUTPUT);
+}
+
+void keypad_scan(bool HIGH_or_LOW){
   if(HIGH_or_LOW){ //if HIGH rows
-    pinMode(row0,INPUT_PULLUP);
-    pinMode(row1,INPUT_PULLUP);
-    pinMode(row2,INPUT_PULLUP);
-    pinMode(row3,INPUT_PULLUP);
-    pinMode(column0,OUTPUT);
-    pinMode(column1,OUTPUT);
-    pinMode(column2,OUTPUT);
-    pinMode(column3,OUTPUT);
-    keypad_press_data[0]=digitalRead(row0); 
-    keypad_press_data[1]=digitalRead(row1);
-    keypad_press_data[2]=digitalRead(row2);
-    keypad_press_data[3]=digitalRead(row3);
+    set_8_modes(row0,row1,row2,row3,column0,column1,column2,column3);
+    keypad_data[0]=digitalRead(row0); 
+    keypad_data[1]=digitalRead(row1);
+    keypad_data[2]=digitalRead(row2);
+    keypad_data[3]=digitalRead(row3);
   }
   else{  //if low columns
-    pinMode(column0,INPUT_PULLUP);
-    pinMode(column1,INPUT_PULLUP);
-    pinMode(column2,INPUT_PULLUP);
-    pinMode(column3,INPUT_PULLUP);
-    pinMode(row0,OUTPUT);
-    pinMode(row1,OUTPUT);
-    pinMode(row2,OUTPUT);
-    pinMode(row3,OUTPUT);
-    keypad_press_data[4]=digitalRead(column0);
-    keypad_press_data[5]=digitalRead(column1);
-    keypad_press_data[6]=digitalRead(column2);
-    keypad_press_data[7]=digitalRead(column3);
+    set_8_modes(column0,column1,column2,column3,row0,row1,row2,row3);
+    keypad_data[4]=digitalRead(column0);
+    keypad_data[5]=digitalRead(column1);
+    keypad_data[6]=digitalRead(column2);
+    keypad_data[7]=digitalRead(column3);
   }
 }
 
@@ -58,19 +54,50 @@ void setup() {
   pinMode(10,OUTPUT);
 
 }
+int blink_time=30;
+void blink(){
+  digitalWrite(10,HIGH);
+  delay(blink_time);
+  digitalWrite(10,LOW);
+  delay(blink_time);
+}
+
+int delay_time=2000;
+void display_data(char index){
+  digitalWrite(10,keypad_data[index]);
+  delay(delay_time);
+  blink();
+  blink();
+  blink();
+}
 
 void loop() {
-
   //all the lines below are meant to be uncommented
+  keypad_scan(HIGH);
 
-  //digitalWrite(00,keypad_press_data[5]);
-
-//  keypad_sweep(HIGH);
-
-  keypad_sweep(HIGH);
-  digitalWrite(10,
-
-  keypad_sweep(HIGH);
-  digitalWrite(10,keypad_press_data[0]);
+  display_data(0);
+  display_data(1);
+  display_data(2);
+  display_data(3);
+  display_data(4);
+  display_data(5);
+  display_data(6);
+  display_data(7);
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
+  blink();
 
 }
