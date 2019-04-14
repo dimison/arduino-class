@@ -11,7 +11,7 @@
 */
 
 //Make sure to change these pins to match your board.
-unsigned row0=6,row1=7,row2=8,row3=9,column0=2,column1=3,column2=4,column3=5,keystroke;
+unsigned row0=2,row1=3,row2=4,row3=5,column0=6,column1=7,column2=8,column3=9,keystroke;
 
 void set_4_modes(char a, char b, char c, char d, char mode){
   pinMode(a,mode); //sets mode for pin a
@@ -19,10 +19,14 @@ void set_4_modes(char a, char b, char c, char d, char mode){
   pinMode(c,mode); //sets mode for pin c
   pinMode(d,mode); //sets mode for pin d
 }
-void keypad_r(char x){keystroke=(keystroke << 1) + digitalRead(x);}
+void keypad_r(char x,char y){keystroke=(keystroke << 1) + digitalRead(x);}
 void keyboard_half_read(char a,char b,char c,char d,char e,char f,char g,char h){
   set_4_modes(a,b,c,d,INPUT_PULLUP);set_4_modes(e,f,g,h,OUTPUT); //set modes
-  keypad_r(a);keypad_r(b);keypad_r(c);keypad_r(d); //record 4 rows or columns
+  digitalWrite(e,LOW);
+  digitalWrite(f,LOW);
+  digitalWrite(g,LOW);
+  digitalWrite(h,LOW);
+  keypad_r(a,e);keypad_r(b,f);keypad_r(c,g);keypad_r(d,h); //record 4 rows or columns
 }
 void keypad_read(bool HIGH_or_LOW){   //I am trying to eliminate this function.
   if(HIGH_or_LOW){                    //if HIGH, scan rows
@@ -57,27 +61,26 @@ void display_bit(char pin, bool bit){
 }
 
 void display_byte(char pin,char data){
-  display_bit(pin,extract_bit(data,0));
-  display_bit(pin,extract_bit(data,1));
-  display_bit(pin,extract_bit(data,2));
-  display_bit(pin,extract_bit(data,3));
-  display_bit(pin,extract_bit(data,4));
-  display_bit(pin,extract_bit(data,5));
-  display_bit(pin,extract_bit(data,6));
-  display_bit(pin,extract_bit(data,7));
-  for(int i=0;i<36;i++){blink();}
   digitalWrite(pin,LOW);
-  delay(delay_time);
+  delay(delay_time/2);
+  digitalWrite(pin,HIGH);
+  delay(delay_time/2);
+  for(char i=0;i<8;i++){display_bit(pin,extract_bit(data,i));}
+  
+  //  for(int i=0;i<36;i++){blink();}
+
+
 }
 
 void loop() {
 
-  keystroke=keystroke << 4; //I have to shift in 4 bits since one keypad_read is missing.
+  //  keystroke=keystroke << 4; //I have to shift in 4 bits since one keypad_read is missing.
 
-  //I can not read HIGH and LOw in the same program for some reason.
+  //I can not read HIGH and LOW in the same program for some reason.
   //when I read both HIGH and LOW all the bits are always HIGH
-    keypad_read(HIGH);
-    keypad_read(LOW);
-    digitalWrite(10,extract_bit(keystroke,7));
+  keypad_read(HIGH); //read rows
+  keypad_read(LOW);  //read columns
+  digitalWrite(10,extract_bit(keystroke,0));
+  //    display_byte(10,255);
 
 }
