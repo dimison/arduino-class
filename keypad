@@ -49,35 +49,22 @@ Here is a pin diagram of the keypad rows and columns
 
  */
 
-
 const unsigned column0=2,column1=3,column2=4,column3=5,row3=6,row2=7,row1=8,row0=9,
              keypad[2][4]={{row0,row1,row2,row3},
-			   {column0,column1,column2,column3}};
+			   {column3,column2,column1,column0}};
 char keystroke;
-const bool ROW=0, COLUMN=0;
+const bool ROW=0, COLUMN=1;
 
-void set_4_modes(char a, char b, char c, char d, char mode){
-  pinMode(a,mode); //sets mode for pin a
-  pinMode(b,mode); //sets mode for pin b
-  pinMode(c,mode); //sets mode for pin c
-  pinMode(d,mode); //sets mode for pin d
+bool keypad_read(bool section, char index){
+  for(int i=0;i<4;i++){
+    pinMode(keypad[!section][i],OUTPUT);
+    digitalWrite(keypad[!section][i],LOW);
+    pinMode(keypad[section][i],INPUT_PULLUP);
+  }
+  return digitalRead(keypad[section][index]);
 }
-void keypad_r(char x,char y){keystroke=(keystroke << 1) + digitalRead(x);}
-void keyboard_half_read(char a,char b,char c,char d,char e,char f,char g,char h){
-  set_4_modes(a,b,c,d,INPUT_PULLUP);set_4_modes(e,f,g,h,OUTPUT); //set modes
-  digitalWrite(e,LOW);
-  digitalWrite(f,LOW);
-  digitalWrite(g,LOW);
-  digitalWrite(h,LOW);
-  keypad_r(a,e);keypad_r(b,f);keypad_r(c,g);keypad_r(d,h); //record 4 columns or rows
-}
-void keypad_read(bool HIGH_or_LOW){   //I am trying to eliminate this function.
-  //                     //if HIGH, scan columns
-    keyboard_half_read(column0,column1,column2,column3,row3,row2,row1,row0);
 
-//                                //if LOW,  scan row
-    keyboard_half_read(row3,row2,row1,row0,column0,column1,column2,column3);
-}
+
 
 bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
 
@@ -116,13 +103,5 @@ void display_byte(char pin,char data){
 
 void loop() {
 
-  //  keystroke=keystroke << 4; //I have to shift in 4 bits since one keypad_read is missing.
-
-  //I can not read HIGH and LOW in the same program for some reason.
-  //when I read both HIGH and LOW all the bits are always HIGH
-  keypad_read(HIGH); //read columns
-  keypad_read(LOW);  //read rows
-  digitalWrite(10,extract_bit(keystroke,0));
-  //    display_byte(10,255);
-
+  digitalWrite(10,keypad_read(ROW,0));
 }
