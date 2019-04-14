@@ -9,12 +9,7 @@
   THIS SOFTWARE.
     
 */
-char keypad_pin=0;
-bool keypad_data=0;
-bool keypad_press_data[2][4]={
-  {0,0,0,0}, //rows
-  {0,0,0,0} //columns
-};
+
 
 const char row1=9;
 const char row2=8;
@@ -25,324 +20,55 @@ const char column2=4;
 const char column3=3;
 const char column4=2;
 
+bool keypad_press_data[8]={0,0,0,0,0,0,0,0};
 
 char keypad_sweep(bool HIGH_or_LOW){
-//jump
-  
-  if(HIGH_or_LOW){ 
-
-    keypad_pin=row1;
+  if(HIGH_or_LOW){ //if HIGH rows
     pinMode(row1,INPUT_PULLUP);
-    keypad_pin=row2;
     pinMode(row2,INPUT_PULLUP);
-    keypad_pin=row3;
     pinMode(row3,INPUT_PULLUP);
-    keypad_pin=row4;
     pinMode(row4,INPUT_PULLUP);
-    keypad_pin=column1;
     pinMode(column1,OUTPUT);
-    keypad_pin=column2;
     pinMode(column2,OUTPUT);
-    keypad_pin=column3;
     pinMode(column3,OUTPUT);
-    keypad_pin=column4;
     pinMode(column4,OUTPUT);
-
-    keypad_press_data[0][0]=digitalRead(row1); //if HIGH rows
-    keypad_press_data[0][1]=digitalRead(row2);
-    keypad_press_data[0][2]=digitalRead(row3);
-    keypad_press_data[0][3]=digitalRead(row4);
+    keypad_press_data[0]=digitalRead(row1); 
+    keypad_press_data[1]=digitalRead(row2);
+    keypad_press_data[2]=digitalRead(row3);
+    keypad_press_data[3]=digitalRead(row4);
 }
-else{
-
-    keypad_pin=column1;
+else{  //if low columns
     pinMode(column1,INPUT_PULLUP);
-    keypad_pin=column2;
     pinMode(column2,INPUT_PULLUP);
-    keypad_pin=column3;
     pinMode(column3,INPUT_PULLUP);
-    keypad_pin=column4;
     pinMode(column4,INPUT_PULLUP);
-    keypad_pin=row1;
     pinMode(row1,OUTPUT);
-    keypad_pin=row2;
     pinMode(row2,OUTPUT);
-    keypad_pin=row3;
     pinMode(row3,OUTPUT);
-    keypad_pin=row4;
     pinMode(row4,OUTPUT);
-    keypad_press_data[1][0]=digitalRead(column1);
-    keypad_press_data[1][1]=digitalRead(column2);
-    keypad_press_data[1][2]=digitalRead(column3);
-    keypad_press_data[1][3]=digitalRead(column4);
-
-
-}
+    keypad_press_data[4]=digitalRead(column1);
+    keypad_press_data[5]=digitalRead(column2);
+    keypad_press_data[6]=digitalRead(column3);
+    keypad_press_data[7]=digitalRead(column4);
+ }
 }
 
-/*
-  bool make_loop=1;
-  while(make_loop){
-
-    if(!HIGH_or_LOW){
-
-      row=row1;
-      keypad_pin=row;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      row=row2;
-      keypad_pin=row;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      row=row3;
-      keypad_pin=row;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      row=row4;
-      keypad_pin=row;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-    }
-    else{
-      column=column1;
-      keypad_pin=column;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      column=column2;
-      keypad_pin=column;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      column=column3;
-      keypad_pin=column;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-      column=column4;
-      keypad_pin=column;
-      pinMode('r');
-      if(keypad_data){
-	break;
-      }
-    }
-    make_loop=0;
-  }
-
-*/
-//}
-
-/*char read_keypad_index(){
-  keypad_fill(HIGH);
-  keypad_sweep(HIGH);
-  if(keypad_data){
-    keypad_data=0;
-    keypad_fill(LOW);
-    keypad_sweep(LOW);
-    keypad_data=0;
-    switch(row){
-    case row1:
-      switch(column){
-      case column1:
-	return 0;
-	break;
-      case column2:
-	return 1;
-	break;
-      case column3:
-	return 1;
-	break;
-      case column4:
-	return 3;
-	break;
-      }
-      break;
-    case row2:
-      switch(column){
-      case column1:
-	return 4;
-	break;
-      case column2:
-	return 5;
-	break;
-      case column3:
-	return 6;
-	break;
-      case column4:
-	return 7;
-	break;
-      }
-      break;
-    case row3:
-      switch(column){
-      case column1:
-	return 8;
-	break;
-      case column2:
-	return 9;
-	break;
-      case column3:
-	return 10;
-	break;
-      case column4:
-	return 11;
-	break;
-      }
-      break;
-    case row4:
-      switch(column){
-      case column1:
-	return 12;
-	break;
-      case column2:
-	return 13;
-	break;
-      case column3:
-	return 14;
-	break;
-      case column4:
-	return 15;
-	break;
-      }
-      break;
-    }
-  }
-}
-
-*/
-/*
-char read_keypad(){
-  switch((int) read_keypad_index){
-  case 0:
-    return '1';
-    break;
-  case 1:
-    return '2';
-    break;
-  case 2:
-    return '3';
-    break;
-  case 3: 
-    return 'A';
-    break;
-  case 4:
-    return '4';
-    break;
-  case '5':
-    return 5;
-    break;
-  case 6:
-    return '6';
-    break;
-  case 7:
-    return 'B';
-    break;
-  case 8:
-    return '7';
-    break;
-  case 9:
-    break;
-    return '8';
-    break;
-  case 10:
-    return '9';
-    break;
-  case 11:
-    return 'C';
-  case 12:
-    return "*";
-    break;
-  case 13:
-    return '0';
-    break;
-  case 14:
-    return '#';
-    break;
-  case 15:
-    return 'D';
-    break;
-  }
-
-}
-*/
-
-/*void test_with_blinks(){
-  keypad_pin=10;
-//  char index=read_keypad_index()+1;
-  while(index--){
-    pinMode('ow1');
-    keypad_data=1;
-    pinMode('w');
-    delay(100);
-    keypad_data=0;
-    pinMode('w');
-    delay(100);
-  }
-
-}
-*/
 void setup() {
 
-
 pinMode(10,OUTPUT);
-//keypad_fill(LOW);
-
-//digitalWrite(W10,LOW);
-
-
-
 
 }
-
-
 
 void loop() {
-//  test_with_blinks();
 
+//all the lines below are meant to be uncommented
 
-//keypad_data=digitalRead(row1);
+//keypad_sweep(LOW);
 
-//keypad_data=digitalRead(column4);
+//digitalWrite(10,keypad_press_data[5]);
 
+keypad_sweep(HIGH);
 
-//keypad_data=digitalRead(column1) || digitalRead(column2);
-//digitalWrite(10,keypad_data);
-//keypad_sweep(false);
-/*  if(false){ 
-    keypad_press_data[0][0]=digitalRead(row1); //if LOW rows
-    keypad_press_data[0][1]=digitalRead(row2);
-    keypad_press_data[0][2]=digitalRead(row3);
-    keypad_press_data[0][3]=digitalRead(row4);
-  }
-  else{ 
-    keypad_press_data[1][0]=digitalRead(column1); //colums
-    keypad_press_data[1][1]=digitalRead(column2);
-    keypad_press_data[1][2]=digitalRead(column3);
-    keypad_press_data[1][3]=digitalRead(column4);
-
-  }*/
-//   keypad_press_data[1][0]=digitalRead(column1);
-//digitalWrite(10,keypad_press_data[1][0]);
-
-//keypad_fill(LOW);
-keypad_sweep(LOW);
-//digitalWrite(10,digitalRead(row2)&&digitalRead(row3));
-digitalWrite(10, keypad_press_data[1][0]);
-
-
+digitalWrite(10,keypad_press_data[0]);
 
 }
-
-//keypad_fill(HIGH);
-//keypad_data=digitalRead(row2);
