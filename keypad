@@ -1,0 +1,270 @@
+/*
+    Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+    SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+    AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+    THIS SOFTWARE.
+    
+*/
+
+ep column;
+char row;
+
+const char row0=5;
+const char row1=4;
+const char row2=3;
+const char row3=2;
+const char column0=9;
+const char column1=8;
+const char column2=7;
+const har column3=6;
+
+
+void action(char action){
+  switch(action){
+  case i:
+    pinMode(pin,INPUT_PULLUP);
+    break;
+  case o:
+    pinMode(pin,OUTPUT);
+    break;
+  case r:
+    keypad_data=digitalRead(pin);
+    break;
+  case w;
+  digitalWrite(pin,keypad_data);
+  break;
+  }
+}
+void keypad_fill(bool HIGH_or_LOW){
+  if(HIGH_or_LOW){
+    pin=row1;
+    action('i');
+    pin=row2;
+    action('i');
+    pin=row3;
+    action('i');
+    pin=row4;
+    action('i');
+    pin=column1;
+    action('o');
+    pin=column2;
+    action('o');
+    pin=column3;
+    action('o');
+    pin=column4;
+    action('o');
+  }
+  else{
+    pin=column1;
+    action('i');
+    pin=column2;
+    action('i');
+    pin=column3;
+    action('i');
+    pin=column4;
+    action('i');
+    action('o');
+    pin=row2;
+    action('o');
+    pin=row3;
+    action('o');
+    pin=row4;
+    action('o');
+  }
+}
+
+char keypad_sweep(bool HIGH_or_LOW){
+  if(HIGH_or_LOW){
+    row=row1;
+    pin=row;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    row=row2;
+    pin=row;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    row=row3;
+    pin=row;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    row=row4;
+    pin=row;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+  }
+  else{
+    column=column1;
+    pin=column;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    column=column2;
+    pin=column;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    column=column3;
+    pin=column;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+    column=column4;
+    pin=column;
+    action('r');
+    if(keypad_data){
+      break;
+    }
+
+  }
+}
+
+char read_key_index(){
+  fill(HIGH);
+  keyad_sweep(HIGH);
+  if(keypad_data){
+    fill(LOW);
+    keypad_sweep(LOW);
+    keypad_data=0;
+    switch(row){
+    case: row1;
+      switch(coumn){
+      case colum1;
+      return 0;
+      break;
+      case column2;
+      return 1;
+      break;
+      case column3;
+      return 1;
+      break;
+      case column4;
+      return 3;
+      break;
+      }
+      break;
+    case: row2;
+      switch(coumn){
+      case colum1;
+      return 4;
+      break;
+      case column2;
+      return 5;
+      break;
+      case column3;
+      return 6;
+      break;
+      case column4;
+      return 7;
+      break;
+      }
+      break;
+    case: row3;
+      switch(coumn){
+      case colum1;
+      return 8;
+      break;
+      case column2;
+      return 9;
+      break;
+      case column3;
+      return 10;
+      break;
+      case column4;
+      return 11;
+      break;
+      }
+      break;
+    case: row1;
+      switch(coumn){
+      case colum1;
+      return 12;
+      break;
+      case column2;
+      return 13;
+      break;
+      case column3;
+      return 14;
+      break;
+      case column4;
+      return 15;
+      break;
+      }
+      break;
+    }
+  }
+}
+
+char read_keypad(){
+  switch(read_keypad_index){
+  case 0:
+    return '1':
+    break;
+  case 1; 
+  return '2'
+    break;
+  case 2;
+  return '3'
+    break;
+  case 3: 
+    return 'A'
+      break;
+  case 4:
+    return '4';
+    break;
+  case '5':
+    return 5;
+    break;
+  case 6;
+  return '6';
+  break;
+  case 7:
+    return 'B';
+    break;
+  case 8:
+    return '7':
+    break;
+  case 9:
+    break;
+    return '8':
+      break;
+  case 10:
+    return '9':
+    break;
+  case 11:
+    return 'C':
+  case 12:
+    return "*";
+    break;
+  case 13:
+    return '0':
+    break;
+  case 14:
+    return '#':
+    break;
+  case 15:
+    return 'D';
+    break;
+  }
+}
+
+}
+void setup() {
+}
+
+void loop() {
+}
