@@ -11,7 +11,7 @@
 */
 
 //Make sure to change these pins to match your board.
-unsigned row0=9,row1=8,row2=7,row3=6,column0=5,column1=4,column2=3,column3=2,keystroke;
+unsigned row0=6,row1=7,row2=8,row3=9,column0=2,column1=3,column2=4,column3=5,keystroke;
 
 void set_4_modes(char a, char b, char c, char d, char mode){
   pinMode(a,mode); //sets mode for pin a
@@ -77,9 +77,7 @@ void loop() {
   //I can not read HIGH and LOw in the same program for some reason.
   //when I read both HIGH and LOW all the bits are always HIGH
     keypad_read(HIGH);
-  keypad_read(HIGH);
-
-  digitalWrite(10,extract_bit(keystroke,7));
-
+    keypad_read(LOW);
+    digitalWrite(10,extract_bit(keystroke,7));
 
 }
