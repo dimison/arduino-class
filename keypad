@@ -22,14 +22,14 @@ const char column3=2;
 bool keypad_data[8]={0,0,0,0,0,0,0,0};
 
 void set_8_modes(char a, char b,char c,char d,char e,char f,char g,char h){
-pinMode(a,INPUT_PULLUP);
-pinMode(b,INPUT_PULLUP);
-pinMode(c,INPUT_PULLUP);
-pinMode(d,INPUT_PULLUP);
-pinMode(e,OUTPUT);
-pinMode(f,OUTPUT);
-pinMode(g,OUTPUT);
-pinMode(h,OUTPUT);
+  pinMode(a,INPUT_PULLUP);
+  pinMode(b,INPUT_PULLUP);
+  pinMode(c,INPUT_PULLUP);
+  pinMode(d,INPUT_PULLUP);
+  pinMode(e,OUTPUT);
+  pinMode(f,OUTPUT);
+  pinMode(g,OUTPUT);
+  pinMode(h,OUTPUT);
 }
 
 void keypad_scan(bool HIGH_or_LOW){
