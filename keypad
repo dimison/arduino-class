@@ -11,97 +11,72 @@
 */
 
 /*
-     )                                 
+  )                                 
   ( /(                           (     
   )\())  (   (               )   )\ )  
-|((_)\  ))\  )\ )  `  )   ( /(  (()/(  
-|_ ((_)/((_)(()/(  /(/(   )(_))  ((_)) 
-| |/ /(_))   )(_))((_)_\ ((_)_   _| |  
+  |((_)\  ))\  )\ )  `  )   ( /(  (()/(  
+  |_ ((_)/((_)(()/(  /(/(   )(_))  ((_)) 
+  | |/ /(_))   )(_))((_)_\ ((_)_   _| |  
   ' < / -_) | || || '_ \)/ _` |/ _` |  
- _|\_\\___|  \_, || .__/ \__,_|\__,_|  
-             |__/ |_|                  
+  _|\_\\___|  \_, || .__/ \__,_|\__,_|  
+  |__/ |_|                  
 
-Here is a pin diagram of the keypad rows and columns
+  Here is a pin diagram of the keypad rows and columns
 
-@@@@@@@@@@@@@@@@
-@  1  2  3  A  @
-@  4  5  6  B  @
-@  7  8  9  C  @
-@  *  0  #  D  @
-@@@@@@@@@@@@@@@@
- | | | | | | | |
- | | | | | | | |
- | | | | | | | |
- r r r r c c c c
- o o o o o o o o
- o o o o l l l l
- w w w w u u u u
-         m m m m
-         n n n n
- 0 1 2 3 0 1 2 3    
+  @@@@@@@@@@@@@@@@
+  @  1  2  3  A  @
+  @  4  5  6  B  @
+  @  7  8  9  C  @
+  @  *  0  #  D  @
+  @@@@@@@@@@@@@@@@
+  | | | | | | | |
+  | | | | | | | |
+  | | | | | | | |
+  r r r r c c c c
+  o o o o o o o o
+  o o o o l l l l
+  w w w w u u u u
+  m m m m
+  n n n n
+  0 1 2 3 0 1 2 3    
 
- p p p p p p p p
- i i i i i i i i
- n n n n n n n n
- 9 8 7 6 5 4 3 2
+  p p p p p p p p
+  i i i i i i i i
+  n n n n n n n n
+  9 8 7 6 5 4 3 2
 
- //Make sure to change these pins to match your board.
+  This is the layout of the pins 
 
- */
+  Make sure to change these pins to match your board.
+
+*/
 
 const unsigned column0=2,column1=3,column2=4,column3=5,row3=6,row2=7,row1=8,row0=9,
-             keypad[2][4]={{row0,row1,row2,row3},
-			   {column3,column2,column1,column0}};
-char keystroke;
+  keypad[2][4]={{row0,row1,row2,row3},
+		{column0,column1,column2,column3}};
 const bool ROW=0, COLUMN=1;
-
 bool keypad_read(bool section, char index){
   for(int i=0;i<4;i++){
     pinMode(keypad[!section][i],OUTPUT);
     digitalWrite(keypad[!section][i],LOW);
     pinMode(keypad[section][i],INPUT_PULLUP);
   }
-  return digitalRead(keypad[section][index]);
+  return !digitalRead(keypad[section][index]);
 }
 
 
-
-bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
-
+//Change this output pin to whatever you'd like.
+int test_pin=10;
 void setup() {
 
-  pinMode(10,OUTPUT);
+  pinMode(test_pin,OUTPUT);
 
 }
 
-int blink_time=30;
-void blink(){
-  digitalWrite(10,HIGH);
-  delay(blink_time);
-  digitalWrite(10,LOW);
-  delay(blink_time);
-}
-
-int delay_time=2000;
-void display_bit(char pin, bool bit){
-  for(char i=0;i<6;i++){blink();}
-  digitalWrite(pin,bit);
-  delay(delay_time);
-}
-
-void display_byte(char pin,char data){
-  digitalWrite(pin,LOW);
-  delay(delay_time/2);
-  digitalWrite(pin,HIGH);
-  delay(delay_time/2);
-  for(char i=0;i<8;i++){display_bit(pin,extract_bit(data,i));}
-  
-  //  for(int i=0;i<36;i++){blink();}
-
-
-}
 
 void loop() {
-
-  digitalWrite(10,keypad_read(ROW,0));
+  digitalWrite(
+	       test_pin, //if key is pressed write it to test pin
+	       keypad_read(COLUMN,0) //try changing ROW to COLUMN or changing the number
+	       );
 }
