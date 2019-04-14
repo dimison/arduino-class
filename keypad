@@ -11,64 +11,66 @@
 */
 
 
-const char row1=9;
-const char row2=8;
-const char row3=7;
-const char row4=6;
-const char column1=5;
-const char column2=4;
-const char column3=3;
-const char column4=2;
+const char row0=9;
+const char row1=8;
+const char row2=7;
+const char row3=6;
+const char column0=5;
+const char column1=4;
+const char column2=3;
+const char column3=2;
 
 bool keypad_press_data[8]={0,0,0,0,0,0,0,0};
 
 char keypad_sweep(bool HIGH_or_LOW){
   if(HIGH_or_LOW){ //if HIGH rows
+    pinMode(row0,INPUT_PULLUP);
     pinMode(row1,INPUT_PULLUP);
     pinMode(row2,INPUT_PULLUP);
     pinMode(row3,INPUT_PULLUP);
-    pinMode(row4,INPUT_PULLUP);
+    pinMode(column0,OUTPUT);
     pinMode(column1,OUTPUT);
     pinMode(column2,OUTPUT);
     pinMode(column3,OUTPUT);
-    pinMode(column4,OUTPUT);
-    keypad_press_data[0]=digitalRead(row1); 
-    keypad_press_data[1]=digitalRead(row2);
-    keypad_press_data[2]=digitalRead(row3);
-    keypad_press_data[3]=digitalRead(row4);
-}
-else{  //if low columns
+    keypad_press_data[0]=digitalRead(row0); 
+    keypad_press_data[1]=digitalRead(row1);
+    keypad_press_data[2]=digitalRead(row2);
+    keypad_press_data[3]=digitalRead(row3);
+  }
+  else{  //if low columns
+    pinMode(column0,INPUT_PULLUP);
     pinMode(column1,INPUT_PULLUP);
     pinMode(column2,INPUT_PULLUP);
     pinMode(column3,INPUT_PULLUP);
-    pinMode(column4,INPUT_PULLUP);
+    pinMode(row0,OUTPUT);
     pinMode(row1,OUTPUT);
     pinMode(row2,OUTPUT);
     pinMode(row3,OUTPUT);
-    pinMode(row4,OUTPUT);
-    keypad_press_data[4]=digitalRead(column1);
-    keypad_press_data[5]=digitalRead(column2);
-    keypad_press_data[6]=digitalRead(column3);
-    keypad_press_data[7]=digitalRead(column4);
- }
+    keypad_press_data[4]=digitalRead(column0);
+    keypad_press_data[5]=digitalRead(column1);
+    keypad_press_data[6]=digitalRead(column2);
+    keypad_press_data[7]=digitalRead(column3);
+  }
 }
 
 void setup() {
 
-pinMode(10,OUTPUT);
+  pinMode(10,OUTPUT);
 
 }
 
 void loop() {
 
-//all the lines below are meant to be uncommented
+  //all the lines below are meant to be uncommented
 
-//keypad_sweep(LOW);
+  //digitalWrite(00,keypad_press_data[5]);
 
-//digitalWrite(10,keypad_press_data[5]);
+//  keypad_sweep(HIGH);
 
-keypad_sweep(HIGH);
+  keypad_sweep(HIGH);
+  digitalWrite(10,
 
-digitalWrite(10,keypad_press_data[0]);
+  keypad_sweep(HIGH);
+  digitalWrite(10,keypad_press_data[0]);
 
 }
