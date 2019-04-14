@@ -1,585 +1,239 @@
 /*
-    Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
-    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
-    SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
-    AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
-    THIS SOFTWARE.
+  Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+  Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+  SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+  AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+  THIS SOFTWARE.
     
 */
 
-const char int_size=sizeof(int); //int size in bytes
+const int wait_time=2200;
 
-int regA, regB, regC; //registers
-
-const char overflow=8 + 1; //stacksize + 1
-int stack[overflow - 1]; //stack
-char head=0; //stack head
-
-const int call_stack_overflow=64+1; //call stack size + 1
-int* call_stack[call_stack_overflow-1]; // call stack
-int call_stack_head=0; //call stack head
-
-const char input_buffer_overflow = 16 + 1; //input buffer size
-char input[input_buffer_overflow - 1]; // user input buffer
-char input_head=0;//input buffer head
-
-
-typedef struct list { // linked lists
-    char* name;
-    bool type;
-    int* definition; //head
-
-    struct list* next_word; //tail
-} list;
-
-list dictionary; //function storage
-
-list dictionary_register; //current spot in dictionary browsing
-
-
-
-
-const int wait_time=1000;
+char led0=2,led1=3,led2=4,led3=5,led4=6,led5=7,led6=8,led7=9,led8=10;
 
 void setup() {
 
-     	dictionary.definition=0; // end of dictionary
-
-	 out( 0 );
-	 out( 1 );
-	 out( 2 );
-	 out( 3 );
-	 out( 4 );
-	 out( 5 );
-	 out( 6 );
-	 out( 7 );
-	 out( 8 );
-
-
-//	 push(2);
-//	 dup();
-//	 pop();
-//	 pop();
-
-//	 num(pop());
-
-
-	 
-
-
-
-
-
-letter('l');
-	 
-	 
+  pinMode( led0, OUTPUT );
+  pinMode( led1, OUTPUT );
+  pinMode( led2, OUTPUT );
+  pinMode( led3, OUTPUT );
+  pinMode( led4, OUTPUT );
+  pinMode( led5, OUTPUT );
+  pinMode( led6, OUTPUT );
+  pinMode( led7, OUTPUT );
+  pinMode( led8, OUTPUT );
+  Serial.begin(9600);
 }
 
 void loop() {
-
-letter('l');
-letter('i');
-letter('v');
-letter('e');
-letter('l');
-letter('o');
-letter('n');
-letter('g');
-letter('a');
-letter('n');
-letter('d');
-letter('p');
-letter('r');
-letter('o');
-letter('s');
-letter('p');
-letter('e');
-letter('r');
-delay(wait_time*3);
-letter('_');
-letter('a');
-letter('b');
-letter('c');
-letter('d');
-letter('e');
-letter('f');
-letter('g');
-letter('h');
-letter('i');
-letter('j');
-letter('k');
-letter('l');
-letter('m');
-letter('n');
-letter('o');
-letter('p');
-letter('q');
-letter('r');
-letter('s');
-letter('t');
-letter('u');
-letter('v');
-letter('w');
-letter('x');
-letter('y');
-letter('z');
-delay(wait_time * 3);
-letter('m');
-letter('a');
-letter('t');
-letter('h');
-delay(wait_time * 2);
-letter('+');
-letter('-');
-letter('*');
-letter('/');
-letter('^');
-letter('=');
-letter('<');
-letter('>');
-delay(wait_time * 2);
-
-
-
-
-
+  
+  alphabet_display();
 
 }
-void w( int x, int y ) {
-
-     digitalWrite( x + 2, y);
-
-}
-void numbers(){
-
-
-     num( 0 );
-     delay( wait_time );
-     num( 1 );
-     delay( wait_time );
-     num( 2 );
-     delay( wait_time );
-     num( 3 );
-     delay( wait_time );
-     num( 4 );
-     delay( wait_time );
-     num( 5 );
-     delay( wait_time );
-     num( 6 );
-     delay( wait_time );
-     num( 7 );
-     delay( wait_time );
-     num( 8 );
-     delay( wait_time );
-     num( 9 );
-     delay( wait_time );
-
-
-
-}
-void blink( int x ) {
-
-     w( x, HIGH );
-     delay( wait_time );
-     w( x, LOW );
-     delay( wait_time );
-
-}
-void out( int x ) {
-
-     pinMode( x + 2, OUTPUT );
-
-}
-void screen(int a, int b, int c, int d, int e, int f, int g, int h, int i){
-
-     	w(0,a);
-	w(1,b);
-	w(2,c);
-	w(3,d);
-	w(4,e);
-	w(5,f);
-	w(6,g);
-	w(7,h);
-	w(8,i);
-
-
-     
+void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool i){
+  digitalWrite(led0,a);
+  digitalWrite(led1,b);
+  digitalWrite(led2,c);
+  digitalWrite(led3,d);
+  digitalWrite(led4,e);
+  digitalWrite(led5,f);
+  digitalWrite(led6,g);
+  digitalWrite(led7,h);
+  digitalWrite(led8,i);
 
 }
 void num(int x) {
-
-     switch(x){
-
-	case 0:
-	screen(HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH);
-	break;
-	case 1:
-	screen(HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,LOW,LOW);
-	break;
-        case 2:
-        screen(HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,HIGH);
-	break;
-        case 3:
-        screen(HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH);
-	break;
-        case 4:
-        screen(HIGH,LOW,HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH);	
-	break;
-        case 5:
-        screen(LOW,HIGH,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW);
-	break;
-        case 6:
-        screen(HIGH,LOW,LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW);
-	break;
-        case 7:
-        screen(HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH);
-	break;
-        case 8:
-        screen(HIGH,HIGH,LOW,HIGH,HIGH,HIGH,LOW,HIGH,HIGH);
-	break;
-        case 9:
-        screen(LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW,LOW,HIGH);	
-	break;
-
-
-     }    
+  switch(x){
+  case 0:
+    screen(HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 1:
+    screen(HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,LOW,LOW);
+    break;
+  case 2:
+    screen(HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,HIGH);
+    break;
+  case 3:
+    screen(HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 4:
+    screen(HIGH,LOW,HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  case 5:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 6:
+    screen(HIGH,LOW,LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 7:
+    screen(HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH);
+    break;
+  case 8:
+    screen(HIGH,HIGH,LOW,HIGH,HIGH,HIGH,LOW,HIGH,HIGH);
+    break;
+  case 9:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  }    
 }
 void letter(char x){
-
-     switch(x){
-
-     case '0':
-     num(0);
-     break;
-     case '1':
-     num(1);
-     break;
-     case '2':
-     num(2);
-     break;
-     case '3':
-     num(3);
-     break;
-     case '4':
-     num(4);
-     break;
-     case '5':
-     num(5);
-     break;
-     case '6':
-     num(6);
-     break;
-     case '7':
-     num(7);
-     break;
-     case '8':
-     num(8);
-     break;
-     case '9':
-     num(9);
-     break;
-     case 'a':
-     screen(LOW,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW,HIGH);
-     break;
-     case 'b':
-     screen(1,0,0,1,1,0,1,1,0);
-     break;
-     case 'c':
-     screen(1,1,1,1,0,0,1,1,1);
-     break;
-     case 'd':
-     screen(0,0,1,0,1,1,0,1,1);
-     break;
-     case 'e':
-     screen(1,1,1,1,1,0,1,1,1);
-     break;
-     case 'f':
-     screen(1,1,1,1,1,0,1,0,0);
-     break;
-     case 'g':
-     screen(1,1,0,1,0,1,1,1,1);
-     break;
-     case 'h':
-     screen(1,0,1,1,1,1,1,0,1);
-     break;
-     case 'i':
-     screen(1,1,1,0,1,0,1,1,1);
-     break;
-     case 'j':
-     screen(1,1,1,0,1,0,1,1,0);
-     break;
-     case 'k':
-     screen(1,0,1,1,1,0,1,0,1);
-     break;
-     case 'l':
-     screen(1,0,0,1,0,0,1,1,1);
-     break;
-     case 'm':
-     screen(0,0,0,1,1,1,1,1,1);
-     break;
-     case 'n':
-     screen(0,0,0,1,1,1,1,0,1);
-     break;
-     case 'o':
-     screen(1,1,1,1,0,1,1,1,1);
-     break;
-     case 'p':
-     screen(1,1,0,1,1,0,1,0,0);
-     break;
-     case 'q':
-     screen(0,1,1,0,1,1,0,0,1);
-     break;
-     case 'r':
-     screen(0,0,0,1,1,0,1,0,0);
-     break;
-     case 's':
-     screen(0,1,1,0,1,0,1,1,0);
-     break;
-     case 't':
-     screen(1,1,1,0,1,0,0,1,0);
-     break;
-     case 'u':
-     screen(1,0,1,1,0,1,1,1,1);
-     break;
-     case 'v':
-     screen(0,0,0,1,0,1,0,1,0);
-     break;
-     case 'w':
-     screen(1,1,1,1,1,1,0,0,0);
-     break;
-     case 'x':
-     screen(1,0,1,0,1,0,1,0,1);
-     break;
-     case 'y':
-     screen(1,0,1,0,1,0,0,1,0);
-     break;
-     case 'z':
-     screen(1,1,0,0,1,0,0,1,1);
-     break;
-     case '+':
-     screen(0,1,0,1,1,1,0,1,1);
-     break;
-     case '-':
-     screen(0,0,0,1,1,1,0,0,0);
-     break;
-     case '/':
-     screen(0,0,1,0,1,0,1,0,0);
-     break;
-     case '*':
-     screen(0,0,0,0,1,0,0,0,0);
-     break;
-     case '<':
-     screen(0,1,0,1,0,0,0,1,0);
-     break;
-     case '>':
-     screen(0,1,0,0,0,1,0,1,0);
-     break;
-     case '^':
-     screen(0,1,0,1,0,1,0,0,0);
-     break;
-     case '=':
-     screen(1,1,1,0,0,0,1,1,1);
-     break;
-     case '_':
-     screen(0,0,0,0,0,0,1,1,1);
-     break;
-     
-     
-
-     }
-     delay(wait_time);
-
-}
-/*void pushc(char x){
-
-     if(stack == overflow){
-
-     	     blink(2);
-	     blink(2);
-	     blink(2);
-	     blink(2);
-
-     }
-     else{
-
-       stack[head++]=x;
-
-     }
-
-}
-char popc(){
-
-       if(head){
-
-       return stack[--head];
-
-       }
-       else{
-
-             blink(8);
-	     blink(8);
-	     blink(8);
-	     blink(8);
-
-
-       }
-
-}*/
-void push(int x){
-
-     if(head==overflow){
-
-             blink(2);
-	     blink(2);
-	     blink(2);
-	     blink(2);
-
-     }
-     else
-     {
-
-	stack[head++]=x;
-
-     }
-
-}
-int pop(){
-       if(head){
-
-	return stack[--head];
-
-
-       }
-       else{
-
-             blink(8);
-	     blink(8);
-	     blink(8);
-	     blink(8);
-
-
-       }
-
-}
-void swap(){
-
-     regA=pop();
-     regB=pop();
-     push(regA);
-     push(regB);
-
- }
-void dup(){
-
-
-     push(stack[head-1]);
-
-}
-char keypress(){
-
-}
-void prompt(){
-
-  //make sure to add a case for if the buffer overflows
-
-  while(input[input_head]!=' '){
-    input[input_head++]=keypress();
+  switch(x){
+  case '0':
+    num(0);
+    break;
+  case '1':
+    num(1);
+    break;
+  case '2':
+    num(2);
+    break;
+  case '3':
+    num(3);
+    break;
+  case '4':
+    num(4);
+    break;
+  case '5':
+    num(5);
+    break;
+  case '6':
+    num(6);
+    break;
+  case '7':
+    num(7);
+    break;
+  case '8':
+    num(8);
+    break;
+  case '9':
+    num(9);
+    break;
+  case 'a':
+    screen(LOW,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW,HIGH);
+    break;
+  case 'b':
+    screen(1,0,0,1,1,0,1,1,0);
+    break;
+  case 'c':
+    screen(1,1,1,1,0,0,1,1,1);
+    break;
+  case 'd':
+    screen(0,0,1,0,1,1,0,1,1);
+    break;
+  case 'e':
+    screen(1,1,1,1,1,0,1,1,1);
+    break;
+  case 'f':
+    screen(1,1,1,1,1,0,1,0,0);
+    break;
+  case 'g':
+    screen(1,1,0,1,0,1,1,1,1);
+    break;
+  case 'h':
+    screen(1,0,1,1,1,1,1,0,1);
+    break;
+  case 'i':
+    screen(1,1,1,0,1,0,1,1,1);
+    break;
+  case 'j':
+    screen(1,1,1,0,1,0,1,1,0);
+    break;
+  case 'k':
+    screen(1,0,1,1,1,0,1,0,1);
+    break;
+  case 'l':
+    screen(1,0,0,1,0,0,1,1,1);
+    break;
+  case 'm':
+    screen(0,0,0,1,1,1,1,1,1);
+    break;
+  case 'n':
+    screen(0,0,0,1,1,1,1,0,1);
+    break;
+  case 'o':
+    screen(1,1,1,1,0,1,1,1,1);
+    break;
+  case 'p':
+    screen(1,1,0,1,1,0,1,0,0);
+    break;
+  case 'q':
+    screen(0,1,1,0,1,1,0,0,1);
+    break;
+  case 'r':
+    screen(0,0,0,1,1,0,1,0,0);
+    break;
+  case 's':
+    screen(0,1,1,0,1,0,1,1,0);
+    break;
+  case 't':
+    screen(1,1,1,0,1,0,0,1,0);
+    break;
+  case 'u':
+    screen(1,0,1,1,0,1,1,1,1);
+    break;
+  case 'v':
+    screen(0,0,0,1,0,1,0,1,0);
+    break;
+  case 'w':
+    screen(1,1,1,1,1,1,0,0,0);
+    break;
+  case 'x':
+    screen(1,0,1,0,1,0,1,0,1);
+    break;
+  case 'y':
+    screen(1,0,1,0,1,0,0,1,0);
+    break;
+  case 'z':
+    screen(1,1,0,0,1,0,0,1,1);
+    break;
+  case '+':
+    screen(0,1,0,1,1,1,0,1,1);
+    break;
+  case '-':
+    screen(0,0,0,1,1,1,0,0,0);
+    break;
+  case '/':
+    screen(0,0,1,0,1,0,1,0,0);
+    break;
+  case '*':
+    screen(0,0,0,0,1,0,0,0,0);
+    break;
+  case '<':
+    screen(0,1,0,1,0,0,0,1,0);
+    break;
+  case '>':
+    screen(0,1,0,0,0,1,0,1,0);
+    break;
+  case '^':
+    screen(0,1,0,1,0,1,0,0,0);
+    break;
+  case '=':
+    screen(1,1,1,0,0,0,1,1,1);
+    break;
+  case '_':
+    screen(0,0,0,0,0,0,1,1,1);
+    break;
   }
-  dictionary_register=dictionary;
-  if(dictionary_register.definition !=0){
-
-  input_head=0;
-
-    //make sure to add error message if definition is not found
-
-  while(dictionary_register.definition!=0 && dictionary_register.name[input_head] != ' '){
-  
-     if(dictionary_register.name[input_head]!=input[input_head]){
-
-        dictionary_register=*dictionary_register.next_word;
-	input_head=0;
-
-     }
-     else{
-
-      input_head++;
-
-     }
-     if(input_head>0){
-
-      if(dictionary_register.type){ //if it is positive it is a built-in
-
-      builtin(dictionary.definition);
-
-     }
-     else{ //else it is a definition
-
-     // be sure to add an error for call stack overflow
-
-     call_stack[call_stack_head++]=dictionary_register.definition;
-
-     }
-
-     }
-
+}
+void alphabet_display(){
+  int alphabet_state='a';	
+  while(true){
+    Serial.print(alphabet_state);
+    letter(alphabet_state);
+    switch(alphabet_state){
+    case 'z':
+      alphabet_state='0';
+      break;
+    case '9':
+      alphabet_state='a';
+      break;
+    }
+    alphabet_state++;
+    delay(wait_time);
   }
 
-     
-
-  }
-  
-
-}
-void builtin(int x){
-
-}
-void next(){
-
- if(call_stack_head==0){
-
- prompt();
-
- }
- else if(false){
-
- 
- //if it is a builtin function, run it
-
- }
- else{
-
- //derefrence the call stack head to get the next word
- //incrememnt the call stack head by 1
- //push the next word onto the stack
-
- }
-
-
-}
-void define(){
-
-
-       
-
- 
-
-  
-
 }
 
-
-
-
-/*     
-(concat "if \"$HOME\"/.config/emacs-arduino/arduino-cli "
-					 "compile --fqbn arduino:avr:uno "
-					 default-directory
-					 "; then "
-					 "\"$HOME\"/.config/emacs-arduino/arduino-cli "
-					 "upload -p /dev/ttyACM0 --fqbn arduino:avr:uno "
-					 default-directory
-					 "; else echo fail; fi"
-					 )*/
