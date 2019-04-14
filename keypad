@@ -76,10 +76,10 @@ void loop() {
 
   //I can not read HIGH and LOw in the same program for some reason.
   //when I read both HIGH and LOW all the bits are always HIGH
+    keypad_read(HIGH);
   keypad_read(HIGH);
-  //keypad_read(HIGH);
 
-  display_byte(10,keystroke);
+  digitalWrite(10,extract_bit(keystroke,7));
 
 
 }
