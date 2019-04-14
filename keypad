@@ -72,12 +72,11 @@ void keyboard_half_read(char a,char b,char c,char d,char e,char f,char g,char h)
   keypad_r(a,e);keypad_r(b,f);keypad_r(c,g);keypad_r(d,h); //record 4 columns or rows
 }
 void keypad_read(bool HIGH_or_LOW){   //I am trying to eliminate this function.
-  if(HIGH_or_LOW){                    //if HIGH, scan columns
+  //                     //if HIGH, scan columns
     keyboard_half_read(column0,column1,column2,column3,row3,row2,row1,row0);
-  }
-  else{                               //if LOW,  scan rows
+
+//                                //if LOW,  scan row
     keyboard_half_read(row3,row2,row1,row0,column0,column1,column2,column3);
-  } //The if/else statement here shouldn't be necessary. I am looking to remove it.
 }
 
 bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
