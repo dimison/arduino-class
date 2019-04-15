@@ -10,18 +10,21 @@
     
 */
 
-const int wait_time=2200;
+//this code puts on a light show with buttons.
 
+//setup pins
 char led0=2,led1=3,led2=4,led3=5,led4=6,led5=7,led6=8,led7=9,led8=10,
   button0=11,button1=12,button2=13,analog_pin=0;
 
+//state for alpahet display
 int alphabet_state='a';
 char button_data[4]={0,0,0,0};
 
+//extract one bit from a byte
 bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
 
 void setup() {
-
+  ///set leds to output
   pinMode( led0, OUTPUT );
   pinMode( led1, OUTPUT );
   pinMode( led2, OUTPUT );
@@ -31,26 +34,41 @@ void setup() {
   pinMode( led6, OUTPUT );
   pinMode( led7, OUTPUT );
   pinMode( led8, OUTPUT );
-  pinMode( button0, INPUT_PULLUP );
+  pinMode( button0, INPUT_PULLUP ); //setup 3 buttons for input
   pinMode( button1, INPUT_PULLUP );
   pinMode( button2, INPUT_PULLUP );	  
-  Serial.begin(9600);
+  Serial.begin(9600); //record serial data
 }
 
 void loop() {
+
+  //print serial data cause thats part of the assigmment
+  Serial.print("Button0\n");
+  Serial.print(!digitalRead(button0));
+  Serial.print("\n");
+  Serial.print("Button1\n");
+  Serial.print(!digitalRead(button1));
+  Serial.print("\n");
+  Serial.print("Button2\n");
+  Serial.print(!digitalRead(button2));
+  Serial.print("\n");
+
+  //set clock of machine to analog dial
   delay(analogRead(analog_pin));
 
   if(!digitalRead(button0)){
+    //if there is no volutage from button0 then just say hahahaha
     if(button_data[0]){
-    letter('h');
-    button_data[0]++;
+      letter('h');
+      button_data[0]++;
     }
     else{
-    letter('a');
-    button_data[0]--;
-      }
+      letter('a');
+      button_data[0]--;
+    }
   }
   else if(!digitalRead(button1)){
+    //if there is no voltage in button1, count in binary
     button_data[2]++;
     screen(
 	   extract_bit(button_data[2],0),
@@ -65,6 +83,7 @@ void loop() {
 	   );
   }
   else if(!digitalRead(button2)){
+    //if there is no voltage in button2, be a traffic light
     switch(button_data[3]){
     case 0:
       letter('r');
@@ -75,12 +94,13 @@ void loop() {
       button_data[3]=2;
       break;
     case 2:
-    letter('y');
-    button_data[3]=0;
-    break;
+      letter('y');
+      button_data[3]=0;
+      break;
     }
   }
   else{
+    //or else do the alphabet
     Serial.print(alphabet_state);
     letter(alphabet_state);
     switch(alphabet_state){
@@ -98,7 +118,7 @@ void loop() {
 
 
 }
-
+//display a bit n every led
 void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool i){
   digitalWrite(led0,a);
   digitalWrite(led1,b);
@@ -111,6 +131,7 @@ void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool
   digitalWrite(led8,i);
 
 }
+//display a number
 void num(int x) {
   switch(x){
   case 0:
@@ -145,6 +166,7 @@ void num(int x) {
     break;
   }    
 }
+//display a letter
 void letter(char x){
   switch(x){
   case '0':
@@ -284,22 +306,5 @@ void letter(char x){
     break;
   }
 }
-void alphabet_display(){
-  int alphabet_state='a';	
-  while(true){
-    Serial.print(alphabet_state);
-    letter(alphabet_state);
-    switch(alphabet_state){
-    case 'z':
-      alphabet_state='0';
-      break;
-    case '9':
-      alphabet_state='a';
-      break;
-    }
-    alphabet_state++;
-    delay(wait_time);
-  }
 
-}
 
