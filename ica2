@@ -1,0 +1,308 @@
+/*
+  Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+  Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+  SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+  AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+  THIS SOFTWARE.
+    
+*/
+
+//this code puts on a light show with buttons.
+
+//setup pins
+char led0=2,led1=3,led2=4,led3=5,led4=6,led5=7,led6=8,led7=9,led8=10,
+  button0=11,button1=12,button2=13,analog_pin=0;
+
+//state logic for the button presses
+bool memory=0;
+bool button0_memory=0;
+bool button0_memory2=0;
+
+
+
+//extract one bit from a byte
+bool extract_bit(unsigned char data, char index){return (data >> index) & 1;}
+
+void setup() {
+  ///set leds to output
+  pinMode( led0, OUTPUT );
+  pinMode( led1, OUTPUT );
+  pinMode( led2, OUTPUT );
+  pinMode( led3, OUTPUT );
+  pinMode( led4, OUTPUT );
+  pinMode( led5, OUTPUT );
+  pinMode( led6, OUTPUT );
+  pinMode( led7, OUTPUT );
+  pinMode( led8, OUTPUT );
+  pinMode( button0, INPUT_PULLUP ); //setup 3 buttons for input
+  pinMode( button1, INPUT_PULLUP );
+  pinMode( button2, INPUT_PULLUP );	  
+  Serial.begin(9600); //record serial data
+}
+
+void loop() {
+
+  //print serial data cause thats part of the assigmment
+  Serial.print("Button0\n");
+  Serial.print(!digitalRead(button0));
+  Serial.print("\n");
+  Serial.print("Button1\n");
+  Serial.print(!digitalRead(button1));
+  Serial.print("\n");
+  Serial.print("Button2\n");
+  Serial.print(!digitalRead(button2));
+  Serial.print("\n");
+
+  if(memory==1){
+    //if memory=-=1 do nothing unless button1 is rleased.
+    //if button 1 is released turn all leds off
+    if(digitalRead(button1)){
+      memory=0;
+      digitalWrite(led0,LOW);
+      digitalWrite(led1,LOW);
+      digitalWrite(led2,LOW);
+    }
+  }
+  else if(!digitalRead(button1)){
+    //if button1 is pressed and memoryis 0 set all leds ihgh one by one and set
+    //mmemory to 1
+    memory=1;
+    digitalWrite(led2,LOW);
+    digitalWrite(led0,HIGH);
+    delay(1000);
+    digitalWrite(led1,HIGH);
+    delay(1000);
+    digitalWrite(led2,HIGH);
+  }
+  else if(!digitalRead(button0)){
+    if(!button0_memory2){ //this outer switch prevents repeats while pressing down.
+      if(!button0_memory){
+	//if the memry for button 0 is low then turn on and off each led one by one
+	//leaving the last one high.
+	button0_memory=1;
+	button0_memory2=1;
+	digitalWrite(led0,HIGH);
+	delay(1000);
+	digitalWrite(led0,LOW);
+	digitalWrite(led1,HIGH);
+	delay(1000);
+	digitalWrite(led1,LOW);
+	digitalWrite(led2,HIGH);
+
+
+      }
+      else{
+	//if button0 memory is high then reset
+	digitalWrite(led0,LOW);
+	digitalWrite(led1,LOW);
+	digitalWrite(led2,LOW);
+	button0_memory=0;
+
+      }
+    }
+    else{
+      if(digitalRead(button0)){
+	button0_memory2=0; //this releases the outer switch if the button is unpressed.
+      }
+    }
+
+
+	 
+
+	
+  }
+
+}
+//display a bit n every led
+void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool i){
+  digitalWrite(led0,a);
+  digitalWrite(led1,b);
+  digitalWrite(led2,c);
+  digitalWrite(led3,d);
+  digitalWrite(led4,e);
+  digitalWrite(led5,f);
+  digitalWrite(led6,g);
+  digitalWrite(led7,h);
+  digitalWrite(led8,i);
+
+}
+//display a number
+void num(int x) {
+  switch(x){
+  case 0:
+    screen(HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 1:
+    screen(HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,LOW,LOW);
+    break;
+  case 2:
+    screen(HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,HIGH);
+    break;
+  case 3:
+    screen(HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 4:
+    screen(HIGH,LOW,HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  case 5:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 6:
+    screen(HIGH,LOW,LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 7:
+    screen(HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH);
+    break;
+  case 8:
+    screen(HIGH,HIGH,LOW,HIGH,HIGH,HIGH,LOW,HIGH,HIGH);
+    break;
+  case 9:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  }    
+}
+//display a letter
+void letter(char x){
+  switch(x){
+  case '0':
+    num(0);
+    break;
+  case '1':
+    num(1);
+    break;
+  case '2':
+    num(2);
+    break;
+  case '3':
+    num(3);
+    break;
+  case '4':
+    num(4);
+    break;
+  case '5':
+    num(5);
+    break;
+  case '6':
+    num(6);
+    break;
+  case '7':
+    num(7);
+    break;
+  case '8':
+    num(8);
+    break;
+  case '9':
+    num(9);
+    break;
+  case 'a':
+    screen(LOW,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW,HIGH);
+    break;
+  case 'b':
+    screen(1,0,0,1,1,0,1,1,0);
+    break;
+  case 'c':
+    screen(1,1,1,1,0,0,1,1,1);
+    break;
+  case 'd':
+    screen(0,0,1,0,1,1,0,1,1);
+    break;
+  case 'e':
+    screen(1,1,1,1,1,0,1,1,1);
+    break;
+  case 'f':
+    screen(1,1,1,1,1,0,1,0,0);
+    break;
+  case 'g':
+    screen(1,1,0,1,0,1,1,1,1);
+    break;
+  case 'h':
+    screen(1,0,1,1,1,1,1,0,1);
+    break;
+  case 'i':
+    screen(1,1,1,0,1,0,1,1,1);
+    break;
+  case 'j':
+    screen(1,1,1,0,1,0,1,1,0);
+    break;
+  case 'k':
+    screen(1,0,1,1,1,0,1,0,1);
+    break;
+  case 'l':
+    screen(1,0,0,1,0,0,1,1,1);
+    break;
+  case 'm':
+    screen(0,0,0,1,1,1,1,1,1);
+    break;
+  case 'n':
+    screen(0,0,0,1,1,1,1,0,1);
+    break;
+  case 'o':
+    screen(1,1,1,1,0,1,1,1,1);
+    break;
+  case 'p':
+    screen(1,1,0,1,1,0,1,0,0);
+    break;
+  case 'q':
+    screen(0,1,1,0,1,1,0,0,1);
+    break;
+  case 'r':
+    screen(0,0,0,1,1,0,1,0,0);
+    break;
+  case 's':
+    screen(0,1,1,0,1,0,1,1,0);
+    break;
+  case 't':
+    screen(1,1,1,0,1,0,0,1,0);
+    break;
+  case 'u':
+    screen(1,0,1,1,0,1,1,1,1);
+    break;
+  case 'v':
+    screen(0,0,0,1,0,1,0,1,0);
+    break;
+  case 'w':
+    screen(1,1,1,1,1,1,0,0,0);
+    break;
+  case 'x':
+    screen(1,0,1,0,1,0,1,0,1);
+    break;
+  case 'y':
+    screen(1,0,1,0,1,0,0,1,0);
+    break;
+  case 'z':
+    screen(1,1,0,0,1,0,0,1,1);
+    break;
+  case '+':
+    screen(0,1,0,1,1,1,0,1,1);
+    break;
+  case '-':
+    screen(0,0,0,1,1,1,0,0,0);
+    break;
+  case '/':
+    screen(0,0,1,0,1,0,1,0,0);
+    break;
+  case '*':
+    screen(0,0,0,0,1,0,0,0,0);
+    break;
+  case '<':
+    screen(0,1,0,1,0,0,0,1,0);
+    break;
+  case '>':
+    screen(0,1,0,0,0,1,0,1,0);
+    break;
+  case '^':
+    screen(0,1,0,1,0,1,0,0,0);
+    break;
+  case '=':
+    screen(1,1,1,0,0,0,1,1,1);
+    break;
+  case '_':
+    screen(0,0,0,0,0,0,1,1,1);
+    break;
+  }
+}
+
+
