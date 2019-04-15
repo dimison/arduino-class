@@ -1,0 +1,263 @@
+/*
+  Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+  Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+  SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+  AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+  THIS SOFTWARE.
+    
+*/
+
+
+//change this constant in order to wait
+const int wait_time=1000;
+
+//map these leds to your pins. Only chars are needed
+char led0=2,led1=3,led2=4,led3=5,led4=6,led5=7,led6=8,led7=9,led8=10;
+//pin for analog potentiometer sensor
+char analog_pin=0;
+//pin for photoresistor
+char light_sensor_pin=1;
+
+
+//The screen function takes 9 high or low states and writes them to a set of LEDs.
+void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool i){
+  digitalWrite(led0,a);
+  digitalWrite(led1,b);
+  digitalWrite(led2,c);
+  digitalWrite(led3,d);
+  digitalWrite(led4,e);
+  digitalWrite(led5,f);
+  digitalWrite(led6,g);
+  digitalWrite(led7,h);
+  digitalWrite(led8,i);
+
+}
+
+//This prints numbers to a set of 9 leds in a row of 3 by 3.
+void num(int x) {
+  switch(x){
+  case 0:
+    screen(HIGH,HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 1:
+    screen(HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,LOW,LOW);
+    break;
+  case 2:
+    screen(HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH,HIGH);
+    break;
+  case 3:
+    screen(HIGH,HIGH,HIGH,LOW,HIGH,HIGH,HIGH,HIGH,HIGH);
+    break;
+  case 4:
+    screen(HIGH,LOW,HIGH,HIGH,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  case 5:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 6:
+    screen(HIGH,LOW,LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW);
+    break;
+  case 7:
+    screen(HIGH,HIGH,HIGH,LOW,LOW,HIGH,LOW,LOW,HIGH);
+    break;
+  case 8:
+    screen(HIGH,HIGH,LOW,HIGH,HIGH,HIGH,LOW,HIGH,HIGH);
+    break;
+  case 9:
+    screen(LOW,HIGH,HIGH,LOW,HIGH,HIGH,LOW,LOW,HIGH);	
+    break;
+  }    
+}
+
+//This prints numbers to a set of 9 leds in a row of 3 by 3.
+void letter(char x){
+  switch(x){
+  case '0':
+    num(0);
+    break;
+  case '1':
+    num(1);
+    break;
+  case '2':
+    num(2);
+    break;
+  case '3':
+    num(3);
+    break;
+  case '4':
+    num(4);
+    break;
+  case '5':
+    num(5);
+    break;
+  case '6':
+    num(6);
+    break;
+  case '7':
+    num(7);
+    break;
+  case '8':
+    num(8);
+    break;
+  case '9':
+    num(9);
+    break;
+  case 'a':
+    screen(LOW,HIGH,LOW,HIGH,LOW,HIGH,HIGH,LOW,HIGH);
+    break;
+  case 'b':
+    screen(1,0,0,1,1,0,1,1,0);
+    break;
+  case 'c':
+    screen(1,1,1,1,0,0,1,1,1);
+    break;
+  case 'd':
+    screen(0,0,1,0,1,1,0,1,1);
+    break;
+  case 'e':
+    screen(1,1,1,1,1,0,1,1,1);
+    break;
+  case 'f':
+    screen(1,1,1,1,1,0,1,0,0);
+    break;
+  case 'g':
+    screen(1,1,0,1,0,1,1,1,1);
+    break;
+  case 'h':
+    screen(1,0,1,1,1,1,1,0,1);
+    break;
+  case 'i':
+    screen(1,1,1,0,1,0,1,1,1);
+    break;
+  case 'j':
+    screen(1,1,1,0,1,0,1,1,0);
+    break;
+  case 'k':
+    screen(1,0,1,1,1,0,1,0,1);
+    break;
+  case 'l':
+    screen(1,0,0,1,0,0,1,1,1);
+    break;
+  case 'm':
+    screen(0,0,0,1,1,1,1,1,1);
+    break;
+  case 'n':
+    screen(0,0,0,1,1,1,1,0,1);
+    break;
+  case 'o':
+    screen(1,1,1,1,0,1,1,1,1);
+    break;
+  case 'p':
+    screen(1,1,0,1,1,0,1,0,0);
+    break;
+  case 'q':
+    screen(0,1,1,0,1,1,0,0,1);
+    break;
+  case 'r':
+    screen(0,0,0,1,1,0,1,0,0);
+    break;
+  case 's':
+    screen(0,1,1,0,1,0,1,1,0);
+    break;
+  case 't':
+    screen(1,1,1,0,1,0,0,1,0);
+    break;
+  case 'u':
+    screen(1,0,1,1,0,1,1,1,1);
+    break;
+  case 'v':
+    screen(0,0,0,1,0,1,0,1,0);
+    break;
+  case 'w':
+    screen(1,1,1,1,1,1,0,0,0);
+    break;
+  case 'x':
+    screen(1,0,1,0,1,0,1,0,1);
+    break;
+  case 'y':
+    screen(1,0,1,0,1,0,0,1,0);
+    break;
+  case 'z':
+    screen(1,1,0,0,1,0,0,1,1);
+    break;
+  case '+':
+    screen(0,1,0,1,1,1,0,1,1);
+    break;
+  case '-':
+    screen(0,0,0,1,1,1,0,0,0);
+    break;
+  case '/':
+    screen(0,0,1,0,1,0,1,0,0);
+    break;
+  case '*':
+    screen(0,0,0,0,1,0,0,0,0);
+    break;
+  case '<':
+    screen(0,1,0,1,0,0,0,1,0);
+    break;
+  case '>':
+    screen(0,1,0,0,0,1,0,1,0);
+    break;
+  case '^':
+    screen(0,1,0,1,0,1,0,0,0);
+    break;
+  case '=':
+    screen(1,1,1,0,0,0,1,1,1);
+    break;
+  case '_':
+    screen(0,0,0,0,0,0,1,1,1);
+    break;
+  }
+}
+
+
+void setup() {
+  //set all of the leds so that they can be turned on and off
+  pinMode( led0, OUTPUT );
+  pinMode( led1, OUTPUT );
+  pinMode( led2, OUTPUT );
+  pinMode( led3, OUTPUT );
+  pinMode( led4, OUTPUT );
+  pinMode( led5, OUTPUT );
+  pinMode( led6, OUTPUT );
+  pinMode( led7, OUTPUT );
+  pinMode( led8, OUTPUT );
+  //serial connection for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  //This slows down the program so we can see it on the leds
+  delay(wait_time);
+  //sample the light in the room
+  unsigned int light=analogRead(light_sensor_pin);
+  //sample the value on the potentiometer
+  unsigned int value=analogRead(value);
+  //print these two values on serial so that it is obvious what is happening inside the machine
+  Serial.print("Light: \n");
+  Serial.print(light);
+  Serial.print("\n");
+  Serial.print("Value: \n");
+  Serial.print(value);
+  Serial.print("\n");
+
+  //if the light is lower than the ceiling light in my room goes, turn all leds off to save power
+  if(light > 150){
+    screen(0,0,0,0,0,0,0,0,0);
+  }
+  else if(value < 250){ //if the dial is very low display a 0 on the screen
+    num(0);
+  }
+  else if(value > 250 && value < 501 ){ //if the dial is medium display a 1 on the screen
+    num(1);
+  }
+  else if(value > 500 && value < 750){ //if the dial is fairly high display a 2 on the screen
+    num(2);
+  }
+  else if(value > 750){ //if the dial is to the max display all leds for maximum brightness
+    screen(1,1,1,1,1,1,1,1,1);
+  }
+ }
