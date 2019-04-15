@@ -77,8 +77,9 @@ void loop() {
     delay(1000);
     digitalWrite(led2,HIGH);
   }
-  else if(!digitalRead(button0)){
+  else if(!digitalRead(button0)){//if we press button 0
     if(!button0_memory2){ //this outer switch prevents repeats while pressing down.
+      digitalWrite(led3,LOW);		     
       if(!button0_memory){
 	//if the memry for button 0 is low then turn on and off each led one by one
 	//leaving the last one high.
@@ -91,8 +92,6 @@ void loop() {
 	delay(1000);
 	digitalWrite(led1,LOW);
 	digitalWrite(led2,HIGH);
-
-
       }
       else{
 	//if button0 memory is high then reset
@@ -101,21 +100,18 @@ void loop() {
 	digitalWrite(led2,LOW);
 	button0_memory=0;
 
-      }
+	}
     }
-    else{
-      if(digitalRead(button0)){
-	button0_memory2=0; //this releases the outer switch if the button is unpressed.
-      }
-    }
-
-
-	 
-
-	
   }
-
+  else{
+    if(digitalRead(button0)){
+      button0_memory2=0; //this releases the button0 command if the button is unpressed.
+    }
+  }
 }
+
+
+
 //display a bit n every led
 void screen(bool a, bool b, bool c, bool d, bool e, bool f, bool g, bool h, bool i){
   digitalWrite(led0,a);
