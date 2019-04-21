@@ -21,23 +21,23 @@ void buzz(int note, int delay_num){
 void tng(){
   buzz(760,3100);
   buzz(560,2850);
-  buzz(666,2800);
-  buzz(500,2700);
-  delay(65);
+  buzz(668,2800);
+  buzz(496,2700);
+  delay(50);
   buzz(670,2500);
   buzz(500,2500);
   buzz(600,2500);
   buzz(445,2500); 
 
-  buzz(300,450);
-  buzz(400,250);
+  buzz(300,600);
+  buzz(406,250);
   buzz(543,1000);
   delay(10);
-  buzz(536,840);
-  buzz(444,220);
-  buzz(300,220);
-  buzz(444,300);
-  buzz(640,1200);
+  buzz(518,740); 
+  buzz(400,220); 
+  buzz(294,200);
+  buzz(400,220);
+  buzz(660,1100);
 
 }
 void setup(){
