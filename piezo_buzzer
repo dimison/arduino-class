@@ -16,32 +16,43 @@ const char song="";
 void buzz(int note, int delay_num){
   tone(buzzer0,note,delay_num);
   delay(delay_num);
-
 }
-void tng(){
-  buzz(760,3100);
-  buzz(560,2850);
-  buzz(668,2800);
-  buzz(498,2700);
-  delay(40);
-  buzz(670,2500);
-  buzz(500,2500);
-  buzz(600,2500);
-  buzz(445,2500); 
-
-  buzz(300,600);
-  buzz(406,250);
-  buzz(543,1000);
-  delay(10);
-  buzz(518,740); 
-  buzz(406,220); 
-  buzz(300,220); 
-  buzz(406,220);
-  buzz(600,1100);
-
+void buzzes(int* notes){
+  int current_note=0;
+  while(notes[current_note]!=0){
+    if(notes[current_note]!=-1){
+      buzz(notes[current_note],notes[current_note+1]);
+	}
+    else{
+      delay(current_note+1);
+	}
+    current_note=current_note+2;
+      
+  }
 }
+int tng[37]={760,3100,
+	     560,2850,
+	     668,2800,
+	     498,2700,
+	     -1,40,
+	     670,2500,
+	     500,2500,
+	     600,2500,
+	     445,2500, 
+	     300,600,
+	     406,250,
+	     543,1000,
+	     -1,10,
+	     518,740,
+	     406,220,
+	     300,220,
+	     406,220,
+	     600,1100,
+	     0};
+
+
 void setup(){
-  tng();
+  buzzes(tng);
 }
 
 void loop() 
