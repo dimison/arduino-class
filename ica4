@@ -1,0 +1,44 @@
+/*
+    Copyright (C) 2019 by John M. Beck <john.morris.beck@gmail.com>
+    Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS
+    SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+    AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+    WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+    NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+    THIS SOFTWARE.
+    
+*/
+
+char buttonPin=2;
+char ledPin=3;
+//This controls the state of the LED
+bool led_not_on=1;
+//this controls the state of if the button is held down
+bool button_not_pressed=1;
+//we say button_not_pressed and led_not_on becuase that way when we do our
+//conditional we don't have to use the ! as often to flip the condition.
+//depending on the optimizations in the arudino compiler this will save
+//a machine instruction or more.
+
+void setup() {
+  //set led so that it can turn on
+  pinMode(ledPin,OUTPUT);
+  //set button so it can read from button presses
+  pinMode(buttonPin,INPUT);
+}
+
+void loop() {
+  do { //if the while loop is true do these
+    if(button_not_pressed && led_not_on){//if we have not already done it
+      led_not_on=1; //switch the led off it was on
+    }
+    else if(button_not_pressed && !led_not_on){//else if we have not already done it
+      led_not_on=0; //switch the led on if it was off
+    }
+    button_not_pressed=0; //note that we have already done the thing now
+    digitalWrite(ledPin,led_not_on); //actually change the led cause we didn't before
+  }
+  while(!digitalRead(buttonPin));//while the button is presssed we do the if chain above.
+  button_not_pressed=1; //when we exit the while loop we start over
+}
