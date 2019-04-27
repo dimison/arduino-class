@@ -1,0 +1,76 @@
+//I define all the pins at the top of my code so our code is all the same
+
+byte red0=2;
+byte yellow0=3;
+byte green0=4;
+
+byte red1=5;
+byte yellow1=6;
+byte green1=7;
+
+
+byte button=8;
+
+bool photo_sensor=0;
+
+//this code makes me blink in one line
+void blink(byte name){
+
+  //print analog read value
+  Serial.println("Current analog value is:");
+  Serial.println(analogRead(photo_sensor));
+
+  //print analog button value
+  Serial.println("Current button value is:");
+  Serial.println(digitalRead(button));
+
+  //turn on
+  digitalWrite(name,HIGH);
+
+  //wait
+  delay(1000);
+
+  //turn off
+  digitalWrite(name,LOW);
+
+  //wait
+  delay(1000);
+  
+}
+
+void setup() {
+
+  //set all lights for output
+  pinMode(red0,OUTPUT);
+  pinMode(green0,OUTPUT);
+  pinMode(yellow0,OUTPUT);
+  pinMode(red1,OUTPUT);
+  pinMode(green1,OUTPUT);
+  pinMode(yellow1,OUTPUT);
+
+  //set button to read
+  pinMode(button,INPUT);
+
+  //analog pin does not need to be set to read
+
+  //Set serial monitor so I can read photoresistor
+  Serial.begin(9600);
+     
+
+
+}
+
+void loop() {
+  
+
+  //blink one side
+  blink(red0);
+  blink(yellow0);
+  blink(green0);
+
+  //blink others side
+  blink(red1);
+  blink(yellow1);
+  blink(green1);
+  
+}
