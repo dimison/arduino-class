@@ -22,6 +22,9 @@ variable road
 variable highwa
 variable on=HIGH
 variable off=LOW
+variable time_seconds=0;
+variable one_second=1000;
+variable half_second=500;
 
 //setup
 pinmodes set lights;
@@ -38,7 +41,7 @@ while(true){
     cop();
   }
   else{
-    cycle();
+    normal_mode();
   }
 
   
@@ -172,6 +175,11 @@ function cycle(){
     }
   }
 }
+variable wait(time){
+  for(start at 0; until reach time; value++){
+    delay(1000);
+  }
+}
 function power_loss(){
   while(button not pressed){
   wait
@@ -183,9 +191,44 @@ function power_loss(){
 }
 
 function cop(){
+  change_light_one_side(highway,yellow)
+  change_light_one_side(road,yellow);
+  wait
   change_light(highway,red);
-  while(cop_button_is_pressed())
+  while(cop_button_is_pressed() OR ten_minutes_pass)
   }
   whos_turn=highway;
   
+}
+function normal_mode(){
+  if(cop_button_not_pressed && power_outage_button_not_pressed){
+      if(turn==highway && highway_color==green){
+        for(start at 0; time>=10 or cop_button_pressed or power_outage_button_pressed){
+          wait(1);
+        }
+        cycle()
+        time=0;
+      }
+      else if(turn==highway && highway_color==yellow){
+        for(start at 0; time>=half_second or cop_button_pressed or power_outage_button_pressed){
+          delay(half_second);
+        }
+        cycle()
+        time=0;
+      }
+      else if(turn==road && road_color==green){
+        for(start at 0; time>=10 or cop_button_pressed or power_outage_button_pressed){
+          wait(1);
+        }
+        cycle()
+        time=0;
+      }
+        else if(turn==road && highway_color==green){
+        for(start at 0; time>=half_second or cop_button_pressed or power_outage_button_pressed){
+          delay(half_second);
+        }
+        cycle()
+        time=0;
+      }
+  }
 }
