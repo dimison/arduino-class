@@ -1,0 +1,191 @@
+
+variable highway_color
+variable road_color
+variable whos_turn=highway;
+variable button_state;
+variable cop_button;
+variable loss_power_button;
+variable red_highway
+variable red_road
+variable blue_highway
+variable blue_road
+variable yellow_highway
+variable yellow_road
+variable green_highway
+variable green_road
+variable highway
+variable road
+variable red
+variable yellow
+variable blue
+variable road
+variable highwa
+variable on=HIGH
+variable off=LOW
+
+//setup
+pinmodes set lights;
+pinmodes set button;
+pinmodes set photresistors;
+
+
+while(true){
+  //this is the loop
+  if(power_loss_button_is_pressed){
+    power_loss();
+  }
+  if(cop_button_is_pressed){
+    cop();
+  }
+  else{
+    cycle();
+  }
+
+  
+}
+function light_pinMode(which_side, which_color, state){
+  if(which_side==ROAD){
+         if(which_color==red){
+      set red_road state
+      set blue_road state
+      
+    }
+    else if(which_color==green){
+      set green_road state
+    }
+    else if(which_color==yellow){
+      set yellow_road state
+    }
+    
+    
+  }
+  else if(which_side==HIGHWAY){
+        if(which_color==red){
+      set red_highway state
+      set blue_highway state
+      
+    }
+    else if(which_color==green){
+      set green_highway state
+    }
+    else if(which_color==yellow){
+      set yellow_highway state
+    }
+ 
+  }
+  
+}
+function switch_light_one_street(side,color){
+  if(color==red){
+    light_pinMode(side,red,on);
+    light_pinMode(side,yellow,off);
+    light_pinMode(side,green,off);
+
+  }
+  else if(color==yellow){
+    light_pinMode(side,red,off);
+    light_pinMode(side,yellow,on);
+    light_pinMode(side,green,off);
+  }
+  else if(color==green){
+    light_pinMode(side,red,off);
+    light_pinMode(side,yellow,off);
+    light_pinMode(side,green,on);
+  }
+  else if(color==off){
+    light_pinMode(side,red,off)
+    light_pinMode(side,yellow,off)
+    light_pinMode(side,green,off)
+  }
+}
+fuction switch_light(side,color){
+  if(side==highway){
+    if(color==red){
+      switch_light_one_street(highway,red);
+      switch_light_one_street(road,red)
+    }
+    else if(color==yellow){
+      switch_light_one_street(highway,yellow);
+      switch_light_one_street(road,red)
+      
+    }
+    else if(color==green){
+     switch_light_one_street(highway,green);
+      switch_light_one_street(road,red)
+    }
+    else if(color==off){
+      switch_light_one_street(highway,off);
+      switch_light_one_street(road,off)
+    }
+  }
+  else if(side==road){
+    if(color==red){ 
+      switch_light_one_street(road,red);
+      switch_light_one_street(highway,red)
+      
+    }
+    else if(color==yellow){
+      switch_light_one_street(road,yellow);
+      switch_light_one_street(highway,red)
+      
+    }
+    else if(color==green){
+      switch_light_one_street(road,green);
+      switch_light_one_street(highway,red)
+      
+    }
+    else if(color==off){
+      switch_light_one_street(road,off);
+      switch_light_one_street(highway,off)
+    }
+    
+  }
+}
+function cycle(){
+  if(whos_turn==highway){
+    if(highway_color==red){
+      change_light(highway,green);
+    }
+    else if(highway_color==yellow){
+      change_light(highway,red);
+      whos_turn=road
+    }
+    else if(highway_color==green){
+      change_light(highway,yellow)
+    }
+    else if(highway_color==off){
+      change_light(highway,red)
+    }
+  else if(whos_turn==road){
+    if(road_color==red){
+      change_light(road,red)
+    }
+    else if(road_color==yellow){
+      change_light(road,red)
+      whos_turn=hghway
+    }
+    else if(road_color==green){
+      change_light(road,yellow)
+    }
+    else if(road_color==off){
+      change_light(road,red)
+    }
+  }
+}
+function power_loss(){
+  while(button not pressed){
+  wait
+  switch_light(highway,off);
+  wait
+  switch_light(highway,on)
+  }
+  whos_turn=highway
+}
+
+function cop(){
+  change_light(highway,red);
+  while(cop_button_is_pressed())
+  }
+  whos_turn=highway;
+  
+}
