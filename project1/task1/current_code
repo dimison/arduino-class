@@ -1,0 +1,405 @@
+
+//this int means red. It needs to be a different number than yellor or blue
+const int red=0;
+//this int means yellow
+const int yellow=1;
+//this int means blue
+const int blue=2;
+//this int meens grean
+const int green=3;
+
+
+//this int is the shortcut for the highway
+const int highway=0;
+//this int is the shortcut for the road
+const int road=1;
+
+//this int sets a light on or high
+const int on=HIGH;
+//this int sets a light low or off
+const int off=LOW;
+
+//these are states
+
+
+//this stores the current color of the light on the highway
+int highway_color=red;
+//this sotres the current color of the light on the roard
+int road_color=red;
+
+
+//this controls who's turn it is, the highway or the side road
+int whos_turn=highway;
+
+//this records the state of the button to see if it is pressed
+int button_state=0;
+
+
+//this is the pin for the green light on the highway
+int highway_green=2;
+
+//this is the pin for the yellow light on the highway
+int highway_yellow=3;
+//this is the pin for the red light on the highway
+int highway_red=4;
+
+
+//this is the pin for the green light on the road
+int road_green=5;
+//this is the pin for the yellow light on the road
+int road_yellow=6;
+//this is the pin for the red light on the road
+int road_red=7;
+
+
+
+//this is the pin for the blue light on the road
+int road_blue=8;
+//this is the pin for the blue light on the highway
+int highway_blue=9;
+
+
+//car on side road button
+int car_side_road_button;
+//This records if the emergency vehicle button is pressed
+int cop_button=0;
+//this records if the loss of power button is pressed
+int power_loss_button=1;
+
+
+
+//this int records time
+int time_seconds=0;
+int time=0;
+
+
+//this int is one second
+const int one_second=1000;
+//this int is a half second
+const int half_second=500;
+
+//this is the time for a yellow light
+const int yellow_time=half_second;
+//this is green time for highway
+const int green_time_highway=one_second*10;
+const int green_time_road_minimum=one_second*3;
+const int green_time_road_maximum=one_second*6;
+
+
+void setup(){
+//we are going to set all the light sto be output
+
+
+//we are going to set all the buttons to be input
+pinMode(highway_red,OUTPUT);
+pinMode(highway_yellow,OUTPUT);
+pinMode(highway_green,OUTPUT);
+pinMode(highway_blue,OUTPUT);
+pinMode(road_red,OUTPUT);
+pinMode(road_yellow,OUTPUT);
+pinMode(road_green,OUTPUT);
+pinMode(road_blue,OUTPUT);
+
+//we set the buttons to input buttons
+pinMode(cop_button,INPUT);
+pinMode(power_loss_button,INPUT);
+pinMode(car_side_road_button,INPUT);
+
+//analog sensors do not need to be set
+
+}
+
+
+void loop(){
+
+  if(!digitalRead(power_loss_button)){
+    //if someone presses the power loss button use the power loss function
+    power_loss();
+  }
+  //if the cop button is pressed enter the emergency vehicle mode
+  if(!digitalRead(cop_button)){
+    cop();
+  }
+  else{
+    //or else do normal mode
+    normal_mode();
+  }
+}
+  
+
+
+//dimison made this function
+//this is a new version of digitalWrite tht works on traffic lights. By set I mean digitalWrite
+int light_digitalWrite(int which_side,int  which_color,int state){
+  if(which_side==road){
+         if(which_color==red){
+      digitalWrite(road_red, state);
+      digitalWrite(road_blue, state);
+      
+    }
+    else if(which_color==green){
+      digitalWrite(road_green, state);
+    }
+    else if(which_color==yellow){
+      digitalWrite(road_yellow,state);
+    }
+    
+    
+  }
+  else if(which_side==highway){
+        if(which_color==red){
+      digitalWrite(highway_red, state);
+      digitalWrite(highway_blue, state);
+      
+    }
+    else if(which_color==green){
+      digitalWrite(highway_green, state);
+    }
+    else if(which_color==yellow){
+      digitalWrite(highway_yellow, state);
+    }
+ 
+  }
+  return 0;
+}
+
+
+//Jaeyoung wrote this function
+//this fucntion sets the light on one side of the street and doesn't care what the other side does
+int switch_light_one_side329(int side, int color){
+  if(color==red){
+    light_digitalWrite(side,red,on);
+    light_digitalWrite(side,yellow,off);
+    light_digitalWrite(side,green,off);
+ 
+  }
+  else if(color==yellow){
+    light_digitalWrite(side,red,off);
+    light_digitalWrite(side,yellow,on);
+    light_digitalWrite(side,green,off);
+  }
+  else if(color==green){
+    light_digitalWrite(side,red,off);
+    light_digitalWrite(side,yellow,off);
+    light_digitalWrite(side,green,on);
+  }
+  else if(color==off){
+    light_digitalWrite(side,red,off);
+    light_digitalWrite(side,yellow,off);
+    light_digitalWrite(side,green,off);
+  }
+
+  return 0;
+
+  
+}
+
+
+//dimison made this function too
+//this function switches the light on both sides at once and should switch the light correctly
+//this function  switches the light on both sides at once and should switch the light correctly
+int switch_light(int side, int color){
+  if(side==highway){
+    if(color==red){
+      switch_light_one_side329(highway,red);
+      switch_light_one_side329(road,red);
+    }
+    else if(color==yellow){
+      switch_light_one_side329(highway,yellow);
+      switch_light_one_side329(road,red);
+      
+    }
+    else if(color==green){
+      switch_light_one_side329(highway,green);
+      switch_light_one_side329(road,red);
+    }
+    else if(color==off){
+      switch_light_one_side329(highway,off);
+      switch_light_one_side329(road,off);
+    }
+  }
+  else if(side==road){
+    if(color==red){ 
+      switch_light_one_side329(road,red);
+      switch_light_one_side329(highway,red);
+      
+    }
+    else if(color==yellow){
+      switch_light_one_side329(road,yellow);
+      switch_light_one_side329(highway,red);
+      
+    }
+    else if(color==green){
+      switch_light_one_side329(road,green);
+      switch_light_one_side329(highway,red);
+      
+    }
+    else if(color==off){
+      switch_light_one_side329(road,off);
+      switch_light_one_side329(highway,off);
+    }
+    
+  }
+  returnn 0;
+}
+//jaeyoung wrote this version of cycle.
+ //this function cycles from red green and yellow
+int cycle(){
+  if(whos_turn==highway){
+    if(highway_color==red){
+      switch_light(highway,green);
+    }
+    else if(highway_color==yellow){
+      switch_light(highway,red);
+      whos_turn=road;
+    }
+    else if(highway_color==green){
+      switch_light(highway,yellow);
+    }
+    else if(highway_color==off){
+      switch_light(highway,red);
+    }
+  else if(whos_turn==road){
+    if(road_color==red){
+      switch_light(road,red);
+    }
+    else if(road_color==yellow){
+      switch_light(road,red);
+      whos_turn=highway;
+    }
+    else if(road_color==green){
+      switch_light(road,yellow);
+    }
+    else if(road_color==off){
+      switch_light(road,red);
+    }
+  }
+
+  }
+  return 0;
+}
+
+  
+
+/*
+//dimison made this function
+//this function cycles from red green and yellow
+int cycle(){
+  if(whos_turn==highway){
+    if(highway_color==red){
+      switch_light(highway,green);
+    }
+    else if(highway_color==yellow){
+      switch_light(highway,red);
+      whos_turn=road;
+    }
+    else if(highway_color==green){
+      switch_light(highway,yellow);
+    }
+    else if(highway_color==off){
+      switch_light(highway,red);
+    }
+  else if(whos_turn==road){
+    if(road_color==red){
+      switch_light(road,red);
+    }
+    else if(road_color==yellow){
+      switch_light(road,red);
+      whos_turn=hghway;
+    }
+    else if(road_color==green){
+      switch_light(road,yellow);
+    }
+    else if(road_color==off){
+      switch_light(road,red);
+    }
+  }
+}
+*/
+
+
+//this function waits for x many half seconds
+int wait(int time){
+  for(int i=0;i<time*one_second;i+=half_second){
+    delay(i);
+  }
+  return 0;
+}
+//this functiond defines what to do during power loss
+int power_loss(){
+  while(!digtitalRead(power_loss_button)){
+  wait(1 * 2);
+  switch_light(highway,off);
+  wait(1 * 2);
+  switch_light(highway,on);
+  }
+  whos_turn=highway;
+  return 0;
+}
+
+
+
+//this function decides what to do if cop, police, or emergency vehicles come
+int cop(){
+  switch_light_one_side(highway,yellow);
+  switch_light_one_side(road,yellow);
+  wait(500 * 2);
+  switch_light(highway,red);
+  time=0;
+  while(!digital_read(cop_button)){
+  }
+  whos_turn=highway;
+  return 0;
+
+}
+
+
+/*
+//this int is one second
+const int one_second=1000;
+//this int is a half second
+const int half_second=500;
+
+//this is the time for a yellow light
+const int yellow_time=half_second;
+//this is green time for highway
+const int green_time_highway=one_second*10;
+const int green_time_road_minimum=one_second*3;
+const int green_time_road_maximum=one_second*6;
+
+*/
+///this function controls the order of operations of the code
+int normal_mode(){
+  if(!digitalRead(cop_button) && !digitalRead(power_loss_button)){
+      if(turn==highway && highway_color==green){
+        for(start at 0; time>=10 || !digitalRead(cop_button) || !digitalRead(power_loss_button)){
+          wait(1);
+        }
+        cycle();
+        time=0;
+      }
+      else if(turn==highway && highway_color==yellow){
+        for(start at 0; time>=half_second || !digitalRead(cop_button) || !digitalRead(power_loss_button)){
+          delay(half_second);
+        }
+        cycle();
+        time=0;
+      }
+      else if(turn==road && road_color==green){
+        for(start at 0; time>=10 || !digitalRead(cop_button) || !digitalRead(power_loss_button)){
+          wait(1);
+        }
+        cycle();
+        time=0;
+      }
+        else if(turn==road && highway_color==green){
+        for(start at 0; time>=half_second || !digitalRead(cop_button) || !digitalRead(power_loss_button)){
+          wait(1);
+        }
+        cycle();
+        time=0;
+      }
+  }
+  return 0;
+}
+  
