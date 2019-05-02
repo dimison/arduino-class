@@ -327,7 +327,7 @@ int wait(int time){
 }
 //this functiond defines what to do during power loss
 int power_loss(){
-  while(!digtitalRead(power_loss_button)){
+  while(!digitalRead(power_loss_button)){
   wait(1 * 2);
   switch_light(highway,off);
   wait(1 * 2);
