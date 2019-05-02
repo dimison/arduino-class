@@ -346,7 +346,7 @@ int cop(){
   wait(500 * 2);
   switch_light(highway,red);
   time=0;
-  while(!digital_read(cop_button)){
+  while(!digital_read(cop_button))
   }
   whos_turn=highway;
   return 0;
