@@ -240,7 +240,7 @@ int switch_light(int side, int color){
     }
     
   }
-  returnn 0;
+  return 0;
 }
 //jaeyoung wrote this version of cycle.
  //this function cycles from red green and yellow
