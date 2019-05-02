@@ -166,7 +166,7 @@ int light_digitalWrite(int which_side,int  which_color,int state){
 
 //Jaeyoung wrote this function
 //this fucntion sets the light on one side of the street and doesn't care what the other side does
-int switch_light_one_side329(int side, int color){
+int switch_light_one_side(int side, int color){
   if(color==red){
     light_digitalWrite(side,red,on);
     light_digitalWrite(side,yellow,off);
@@ -201,42 +201,42 @@ int switch_light_one_side329(int side, int color){
 int switch_light(int side, int color){
   if(side==highway){
     if(color==red){
-      switch_light_one_side329(highway,red);
-      switch_light_one_side329(road,red);
+      switch_light_one_side(highway,red);
+      switch_light_one_side(road,red);
     }
     else if(color==yellow){
-      switch_light_one_side329(highway,yellow);
-      switch_light_one_side329(road,red);
+      switch_light_one_side(highway,yellow);
+      switch_light_one_side(road,red);
       
     }
     else if(color==green){
-      switch_light_one_side329(highway,green);
-      switch_light_one_side329(road,red);
+      switch_light_one_side(highway,green);
+      switch_light_one_side(road,red);
     }
     else if(color==off){
-      switch_light_one_side329(highway,off);
-      switch_light_one_side329(road,off);
+      switch_light_one_side(highway,off);
+      switch_light_one_side(road,off);
     }
   }
   else if(side==road){
     if(color==red){ 
-      switch_light_one_side329(road,red);
-      switch_light_one_side329(highway,red);
+      switch_light_one_side(road,red);
+      switch_light_one_side(highway,red);
       
     }
     else if(color==yellow){
-      switch_light_one_side329(road,yellow);
-      switch_light_one_side329(highway,red);
+      switch_light_one_side(road,yellow);
+      switch_light_one_side(highway,red);
       
     }
     else if(color==green){
-      switch_light_one_side329(road,green);
-      switch_light_one_side329(highway,red);
+      switch_light_one_side(road,green);
+      switch_light_one_side(highway,red);
       
     }
     else if(color==off){
-      switch_light_one_side329(road,off);
-      switch_light_one_side329(highway,off);
+      switch_light_one_side(road,off);
+      switch_light_one_side(highway,off);
     }
     
   }
